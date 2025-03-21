@@ -1,7 +1,9 @@
 //查询Token
-let XJikeAccessToken = ''
+import {getStorageItem, setStorageItem} from "@/utils/storage.ts"
+
+let XJikeAccessToken = getStorageItem('XJikeAccessToken', '')
 //刷新Token
-let XJikeRefreshToken = ''
+let XJikeRefreshToken = getStorageItem('XJikeRefreshToken', '')
 
 function formatDate() {
     const date = new Date();
@@ -68,10 +70,19 @@ function rGet(url: string, params: any = {}) {
             'Local-Time': formatDate(),
             'x-jike-access-token': XJikeAccessToken,
         },
-    }).then((resp) => resp.json()).catch((err) => console.error(err))
+    }).then((resp) => {
+        if (resp.ok) {
+            return resp.json()
+        }else {
+            return Promise.reject({
+                status: resp.status,
+                statusText: resp.statusText
+            })
+        }
+    })
 }
 
-function rPost(url: string, data: any = {}) {
+function rPost(url: string, data: any = {}, getTokenHeader = false) {
     return fetch(url, {
         method: 'POST',
         headers: {
@@ -80,21 +91,50 @@ function rPost(url: string, data: any = {}) {
             'x-jike-access-token': XJikeAccessToken,
         },
         body: JSON.stringify(data),
-    }).then((resp) => resp.json()).catch((err) => console.error(err))
+    }).then((resp) => {
+        if (resp.ok) {
+            if (getTokenHeader) {
+                const accessToken: string = resp.headers.get('x-jike-access-token') || ''
+                const refreshToken: string = resp.headers.get('x-jike-refresh-token') || ''
+                XJikeAccessToken = accessToken
+                XJikeRefreshToken = refreshToken
+                setStorageItem('XJikeAccessToken', XJikeAccessToken)
+                setStorageItem('XJikeRefreshToken', XJikeRefreshToken)
+            }
+            return resp.json()
+        }else {
+            return Promise.reject({
+                status: resp.status,
+                statusText: resp.statusText
+            })
+        }
+    })
 }
-
 
 //刷新Token
 function refreshToken() {
-    fetch('/api/app_auth_tokens.refresh', {
+    return fetch('/api/app_auth_tokens.refresh', {
         method: 'POST',
         headers: {
             ...commonHeader,
             'x-jike-access-token': XJikeAccessToken,
             'x-jike-refresh-token': XJikeRefreshToken,
         }
+    }).then((resp) => {
+        const accessToken: string = resp.headers.get('x-jike-access-token') || ''
+        const refreshToken: string = resp.headers.get('x-jike-refresh-token') || ''
+        XJikeAccessToken = accessToken
+        XJikeRefreshToken = refreshToken
+        setStorageItem('XJikeAccessToken', XJikeAccessToken)
+        setStorageItem('XJikeRefreshToken', XJikeRefreshToken)
+        return resp.json()
+    }).catch((err) => console.error(err))
+}
+
+function reCallOn401(func: any) {
+    refreshToken().then(() => {
+        func.call()
     })
 }
 
-
-export { rGet, rPost }
+export { rGet, rPost, reCallOn401 }

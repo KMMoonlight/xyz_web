@@ -20,7 +20,7 @@ interface ILoginParams {
 }
 
 export function apiLogin(data: ILoginParams) {
-    return rPost('/api/v1/auth/loginOrSignUpWithSMS', data)
+    return rPost('/api/v1/auth/loginOrSignUpWithSMS', data, true)
 }
 
 //---------------------------------以下需要Token-------------------------------------------
@@ -214,7 +214,104 @@ interface IUpdatePlaybackProgressParams {
     }[]
 }
 
-
 export function apiUpdatePlaybackProgress(data: IUpdatePlaybackProgressParams) {
     return rPost('/api/v1/playback-progress/update', data)
 }
+
+
+//查询单集的评论
+interface ICommentPrimaryParams {
+    order: string
+    id: string
+    loadMoreKey?: {
+        id: string
+        direction: string
+        hotSortScore: number
+    }
+}
+
+export function apiGetCommentPrimary(data: ICommentPrimaryParams) {
+    const query = {
+        order: data.order,
+        owner: {
+            id: data.id,
+            type: 'EPISODE'
+        },
+        loadMoreKey: data.loadMoreKey
+    }
+
+    return rPost('/api/v1/comment/list-primary', query)
+}
+
+
+//查询回复的评论
+interface ICommentThreadParams {
+    order: string
+    primaryCommentId: string
+}
+
+export function apiGetCommentThread(data: ICommentThreadParams) {
+    return rPost('/api/v1/comment/list-thread', data)
+}
+
+
+//收藏评论
+interface ICommentCollectParams {
+    commentId: string
+}
+
+export function apiCommentCollect(data: ICommentCollectParams) {
+    return rPost('/api/v1/comment/collect/create', data)
+}
+
+
+//取消收藏评论
+interface IRemoveCommentCollectParams {
+    commentId: string
+}
+
+export function apiRemoveCommentCollect(data: IRemoveCommentCollectParams) {
+    return rPost('/api/v1/comment/collect/remove', data)
+}
+
+
+//获取收藏评论列表
+export function apiGetCommentCollectList() {
+    return rPost('/api/v1/comment/collect/list')
+}
+
+
+//点赞 取消点赞评论
+interface ICommentLikeUpdateParams {
+    id: string
+    liked: boolean
+}
+
+export function apiUpdateCommentLike(data: ICommentLikeUpdateParams) {
+    const query = {
+        liked: data.liked,
+        target: {
+            id: data.id,
+            type: 'COMMENT'
+        },
+        sourcePageName: 15,
+        currentPageName: 20
+    }
+    return rPost('/api/v1/like/update', query)
+}
+
+
+//首页榜单、精选节目、推荐等
+export function apiDiscoveryFeedList() {
+    return rPost('/api/v1/discovery-feed/list')
+}
+
+
+
+
+
+
+
+
+
+

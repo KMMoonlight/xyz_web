@@ -1,22 +1,17 @@
 import './App.css'
-import { request } from "./utils"
-
+import LoginPage from '@/pages/login/index'
+import {Toaster} from "sonner"
+import { storage } from '@/utils/index'
+import HomePage from '@/pages/home/index'
 
 function App() {
-  const query = () => {
-      request.rPost('/api/v1/auth/sendCode', {
-          mobilePhoneNumber: "17621702358",
-          areaCode: "+86"
-      }).then((res) => {
-          console.log(res)
-      })
-  }
+
+  const isLogin = storage.getStorageItem('XJikeAccessToken') && storage.getStorageItem('XJikeRefreshToken')
 
   return (
     <>
-      <button onClick={query}>
-          click
-      </button>
+      { !isLogin ? <LoginPage/> : <HomePage/> }
+      <Toaster />
     </>
   )
 }
