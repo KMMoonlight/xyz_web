@@ -308,7 +308,14 @@ export function apiDiscoveryFeedList() {
 
 
 
+//榜单
+interface IRankCategoryParams {
+    category: string
+}
 
+export function apiGetRankList(params: IRankCategoryParams) {
+    return rGet('/api/v1/top-list/get', params)
+}
 
 
 

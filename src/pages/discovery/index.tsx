@@ -1,16 +1,21 @@
 import { api, request } from '@/utils/index'
-import {useEffect, useState} from "react"
-import { Skeleton } from "@/components/ui/skeleton"
+import {useEffect, useMemo, useState} from "react"
+import CommonSkeleton from '@/components/CommonSkeleton'
+import DiscoveryEditorPick from "./components/DiscoveryEditorPick"
+import DiscoveryHeader from "./components/DiscoveryHeader"
+import DiscoveryEpisodeRecommend from "./components/DiscoveryEpisodeRecommend";
 
 
 export default function DiscoveryPage() {
 
     const [loading, setLoading] = useState<boolean>(false)
+    const [discoveryData, setDiscoveryData] = useState<any>({})
+
 
     const queryDiscoveryData = () => {
         setLoading(true)
         api.apiDiscoveryFeedList().then((res) => {
-            console.log('res', res)
+            setDiscoveryData(res)
         }).catch((e) => {
             if (e.status === 401) {
               request.reCallOn401(queryDiscoveryData)
@@ -21,17 +26,35 @@ export default function DiscoveryPage() {
     }
 
     useEffect(() => {
-        //queryDiscoveryData()
-        setLoading(true)
-        setTimeout(() => {
-            setLoading(false)
-        }, 1000)
+        queryDiscoveryData()
     }, [])
 
+    const editorPickData = useMemo(() => {
+        const result = discoveryData?.data?.find((cell: any) => cell.type === 'EDITOR_PICK')
+        return result ? result.data.picks : []
+    }, [discoveryData])
+
+    const headerData = useMemo(() => {
+        const result = discoveryData?.data?.find((cell: any) => cell.type === 'DISCOVERY_HEADER')
+        return result ? result.data : []
+    }, [discoveryData])
+
+    const recommendData = useMemo(() => {
+        const result = discoveryData?.data?.find((cell: any) => cell.type === 'DISCOVERY_EPISODE_RECOMMEND')
+        return result ? result.data : {target: []}
+    }, [discoveryData])
+
+
     return (
         <>
-            <div className="w-full h-full">
-                { loading ? <DiscoverySkeleton/> : 'Discovery'}
+            <div className="w-full flex flex-col items-center">
+                { loading ? <CommonSkeleton length={3} className="mt-4"/> : (
+                    <>
+                        <DiscoveryHeader data={headerData}/>
+                        <DiscoveryEpisodeRecommend data={recommendData}/>
+                        <DiscoveryEditorPick data={editorPickData}/>
+                    </>
+                )}
             </div>
         </>
     )
@@ -39,49 +62,4 @@ export default function DiscoveryPage() {
 
 
 
-function DiscoverySkeleton() {
-    return (
-        <>
-            { new Array(5).fill(1).map((_, index) => <SkeletonCell key={index}/>) }
-        </>
-    )
-}
 
-
-function SkeletonCell() {
-    return (
-        <div className="flex items-center w-full justify-around pt-2">
-            <div className="flex flex-col space-y-3 w-[24%]">
-                <Skeleton className="h-[125px] w-full rounded-xl"/>
-                <div className="space-y-2">
-                    <Skeleton className="h-4 w-full"/>
-                    <Skeleton className="h-4 w-full"/>
-                </div>
-            </div>
-
-            <div className="flex flex-col space-y-3 w-[24%]">
-                <Skeleton className="h-[125px] w-full rounded-xl"/>
-                <div className="space-y-2">
-                    <Skeleton className="h-4 w-full"/>
-                    <Skeleton className="h-4 w-full"/>
-                </div>
-            </div>
-
-            <div className="flex flex-col space-y-3 w-[24%]">
-                <Skeleton className="h-[125px] w-full rounded-xl"/>
-                <div className="space-y-2">
-                    <Skeleton className="h-4 w-full"/>
-                    <Skeleton className="h-4 w-full"/>
-                </div>
-            </div>
-
-            <div className="flex flex-col space-y-3 w-[24%]">
-                <Skeleton className="h-[125px] w-full rounded-xl"/>
-                <div className="space-y-2">
-                    <Skeleton className="h-4 w-full"/>
-                    <Skeleton className="h-4 w-full"/>
-                </div>
-            </div>
-        </div>
-    )
-}
