@@ -1,5 +1,6 @@
 import {IUser, IPermission, IEpisode} from "@/types/type.ts"
-import { Headphones, MessageSquareText, CirclePlay } from 'lucide-react'
+import {Headphones, MessageSquareText, CirclePlay } from 'lucide-react'
+import * as React from 'react'
 
 interface DiscoveryEditorPickItem {
     episode: IEpisode
@@ -30,18 +31,18 @@ interface DiscoveryEditorPickItem {
     }
 }
 
-
-export default function DiscoveryEditorPick(props: {data: DiscoveryEditorPickItem[]}) {
+const DiscoveryEditorPick: React.FC = (props: {data: DiscoveryEditorPickItem[]}) => {
     return (
         <>
-            <div className="text-2xl ml-4 mt-4" style={{ color: '#25b4e1'}}>
+            <div className="text-2xl ml-4 mt-20 w-[30%]" style={{color: '#25b4e1'}}>
                 编辑精选
             </div>
             <div className="mt-2 flex flex-wrap gap-4 justify-start items-center">
                 {
                     props.data.map((cell) => {
                         return (
-                            <div key={cell.episode.eid} className="max-w-[420px] h-[194px] mx-4 rounded-md border border-neutral-100 shadow-sm">
+                            <div key={cell.episode.eid}
+                                 className="max-w-[420px] h-[194px] mx-4 rounded-md border border-neutral-100 shadow-sm">
                                 <div className="flex justify-around mx-4 my-2">
                                     <img
                                         src={cell.episode?.image?.thumbnailUrl || cell.episode.podcast.image.thumbnailUrl}
@@ -52,8 +53,9 @@ export default function DiscoveryEditorPick(props: {data: DiscoveryEditorPickIte
                                             <span className="text-neutral-400 text-sm">
                                                 {cell.episode.podcast.author !== '佚名' ? cell.episode.podcast.author : cell.episode.podcast.title}
                                             </span>
-                                            <span className="line-clamp-2 color-neutral-900 text-sm font-bold cursor-pointer"
-                                                  title={cell.episode.title}>
+                                            <span
+                                                className="line-clamp-2 color-neutral-900 text-sm font-bold cursor-pointer"
+                                                title={cell.episode.title}>
                                                 {cell.episode.title}
                                             </span>
                                         </div>
@@ -73,7 +75,7 @@ export default function DiscoveryEditorPick(props: {data: DiscoveryEditorPickIte
                                     className="flex w-full pl-[80px] justify-between text-neutral-400 text-xs mt-2 pr-3">
                                     <div className="flex items-center">
                                         <div className="flex">
-                                        {cell.recentAudiences.map((item) => {
+                                            {cell.recentAudiences.map((item) => {
                                                 return (
                                                     <img src={item.avatar.picture.thumbnailUrl} key={item.uid}
                                                          alt="avatar"
@@ -108,3 +110,5 @@ export default function DiscoveryEditorPick(props: {data: DiscoveryEditorPickIte
         </>
     )
 }
+
+export default DiscoveryEditorPick

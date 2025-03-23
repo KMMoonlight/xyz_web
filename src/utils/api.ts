@@ -8,7 +8,7 @@ interface ISMSCodeParams {
 }
 
 export function apiSendSMSCode(data: ISMSCodeParams) {
-    return rPost('/api/v1/auth/sendCode', data)
+    return rPost('/api/v1/auth/sendCode', data, true)
 }
 
 
@@ -20,7 +20,7 @@ interface ILoginParams {
 }
 
 export function apiLogin(data: ILoginParams) {
-    return rPost('/api/v1/auth/loginOrSignUpWithSMS', data, true)
+    return rPost('/api/v1/auth/loginOrSignUpWithSMS', data, true, true)
 }
 
 //---------------------------------以下需要Token-------------------------------------------
@@ -306,6 +306,11 @@ export function apiDiscoveryFeedList() {
     return rPost('/api/v1/discovery-feed/list')
 }
 
+
+//刷新首页大家都在听
+export function apiRefreshEpisodeRecommend() {
+    return rPost('/api/v1/discovery-collection/refresh-episode-recommend')
+}
 
 
 //榜单

@@ -3,6 +3,7 @@ import CommonSkeleton from "@/components/CommonSkeleton"
 import {api, request} from "@/utils/index"
 import {IEpisode, IRankListItem} from "@/types/type"
 import RankList from './components/RankList'
+import * as React from 'react'
 
 enum TOP_CATEGORY {
     HOT_EPISODES_IN_24_HOURS = 'HOT_EPISODES_IN_24_HOURS',
@@ -10,22 +11,28 @@ enum TOP_CATEGORY {
     NEW_STAR_EPISODES = 'NEW_STAR_EPISODES'
 }
 
+type ITabDataList = { type: TOP_CATEGORY, data: IRankListItem}[]
 
-export default function RankPage() {
+const RankPage: React.FC = () => {
 
     const [loading, setLoading] = useState<boolean>(false)
 
     const [currentTab, setCurrentTab] = useState<TOP_CATEGORY>(TOP_CATEGORY.HOT_EPISODES_IN_24_HOURS)
 
-    const [tabData, setTabData] = useState<IRankListItem>(null)
+    const [tabDataList, setTabDataList] = useState<ITabDataList>([])
 
     const queryTopListData = (tab: TOP_CATEGORY) => {
         setLoading(true)
         api.apiGetRankList({category: tab}).then((res) => {
-            setTabData(res.data)
+            setTabDataList((val) => {
+                return val.concat({
+                    type: tab,
+                    data: res.data
+                })
+            })
         }).catch((e) => {
             if (e.status === 401) {
-                request.reCallOn401(queryTopListData)
+                request.reCallOn401(queryTopListData, tab)
             }
         }).finally(() => {
             setLoading(false)
@@ -34,12 +41,19 @@ export default function RankPage() {
 
     const changeTab = (tab: TOP_CATEGORY) => {
       setCurrentTab(tab)
-      queryTopListData(tab)
     }
 
     useEffect(() => {
-        queryTopListData(currentTab)
+        queryTopListData(TOP_CATEGORY.HOT_EPISODES_IN_24_HOURS)
+        queryTopListData(TOP_CATEGORY.SKYROCKET_EPISODES)
+        queryTopListData(TOP_CATEGORY.NEW_STAR_EPISODES)
     }, [])
+
+
+    const tabData = useMemo(() => {
+        return tabDataList.find((cell) => cell.type == currentTab)?.data || null
+    }, [currentTab, tabDataList])
+
 
     const headerBg = useMemo(() => {
         return tabData?.background ? {
@@ -87,8 +101,7 @@ export default function RankPage() {
     )
 }
 
-
-function RankListWrapper(props: { loading: boolean, data: {data: {item: IEpisode}[], publishDate: string} }) {
+const RankListWrapper: React.FC = (props: { loading: boolean, data: {data: {item: IEpisode}[], publishDate: string} }) => {
     const pubDateObj = props.data.publishDate ? new Date(props.data.publishDate) : null
     let pubDateStr = ''
 
@@ -110,3 +123,5 @@ function RankListWrapper(props: { loading: boolean, data: {data: {item: IEpisode
         </>
     )
 }
+
+export default RankPage

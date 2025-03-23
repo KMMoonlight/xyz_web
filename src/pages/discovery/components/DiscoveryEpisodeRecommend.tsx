@@ -1,5 +1,10 @@
-import {IEpisode, IUser} from "@/types/type.ts";
-import { CirclePlay } from "lucide-react";
+import {IEpisode, IUser} from "@/types/type.ts"
+import { CirclePlay, RefreshCcw } from "lucide-react"
+import {Button} from "@/components/ui/button"
+import {useMemo, useState} from "react";
+import {api, request} from "@/utils/index"
+import * as React from 'react'
+
 
 interface DiscoveryEpisodeRecommendItem {
     title: string
@@ -18,15 +23,44 @@ interface DiscoveryEpisodeRecommendItem {
 }
 
 
-export default function DiscoveryEpisodeRecommend(props: {data: DiscoveryEpisodeRecommendItem}) {
+const DiscoveryEpisodeRecommend: React.FC = (props: {data: DiscoveryEpisodeRecommendItem}) => {
+
+    const [refreshData, setRefreshData] = useState<DiscoveryEpisodeRecommendItem>(null)
+    const [refreshLoading, setRefreshLoading ] = useState<boolean>(false)
+
+    const refreshRecommend = () => {
+        setRefreshLoading(true)
+        api.apiRefreshEpisodeRecommend().then((res)=> {
+            setRefreshData(res.data)
+        }).catch((e) => {
+            if (e.status === 401) {
+                request.reCallOn401(refreshRecommend)
+            }
+        }).finally(() => {
+            setRefreshLoading(false)
+        })
+    }
+
+    const useData = useMemo(() => {
+        return refreshData ? refreshData : props.data
+    }, [props.data, refreshData])
+
     return (
         <>
-            <div className="text-2xl ml-4 mt-4" style={{color: '#25b4e1'}}>
-                {props.data.title}
+            <div className="ml-4 mt-4 flex w-[30%] justify-between">
+                <span className="text-2xl" style={{color: '#25b4e1'}}>
+                    {useData.title}
+                </span>
+                <Button variant="outline" className="cursor-pointer" onClick={refreshRecommend}>
+                    <RefreshCcw size={12} className={refreshLoading ? "animate-spin" : ''}/>
+                    <span className="text-neutral-400 text-sm">
+                        换一换
+                    </span>
+                </Button>
             </div>
             <div className="mt-2 flex flex-wrap gap-4 justify-start items-center">
                 {
-                    props.data.target.map((cell) => {
+                    useData.target.map((cell) => {
                         return (
                             <div key={cell.episode.eid}
                                  className="w-[420px] h-[120px] mx-4 rounded-md border border-neutral-100 shadow-sm">
@@ -60,3 +94,6 @@ export default function DiscoveryEpisodeRecommend(props: {data: DiscoveryEpisode
         </>
     )
 }
+
+
+export default DiscoveryEpisodeRecommend

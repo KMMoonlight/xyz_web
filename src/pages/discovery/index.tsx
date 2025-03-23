@@ -4,9 +4,9 @@ import CommonSkeleton from '@/components/CommonSkeleton'
 import DiscoveryEditorPick from "./components/DiscoveryEditorPick"
 import DiscoveryHeader from "./components/DiscoveryHeader"
 import DiscoveryEpisodeRecommend from "./components/DiscoveryEpisodeRecommend";
+import * as React from 'react'
 
-
-export default function DiscoveryPage() {
+const DiscoveryPage: React.FC = () => {
 
     const [loading, setLoading] = useState<boolean>(false)
     const [discoveryData, setDiscoveryData] = useState<any>({})
@@ -59,6 +59,9 @@ export default function DiscoveryPage() {
         </>
     )
 }
+
+
+export default  DiscoveryPage
 
 
 

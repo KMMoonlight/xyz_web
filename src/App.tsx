@@ -1,16 +1,15 @@
 import './App.css'
-import LoginPage from '@/pages/login/index'
 import {Toaster} from "sonner"
-import { storage } from '@/utils/index'
-import HomePage from '@/pages/home/index'
+import routes from '@/routes/index'
+import {useRoutes} from "react-router";
 
 function App() {
 
-  const isLogin = storage.getStorageItem('XJikeAccessToken') && storage.getStorageItem('XJikeRefreshToken')
+  const elementRouter = useRoutes(routes)
 
   return (
     <>
-      { !isLogin ? <LoginPage/> : <HomePage/> }
+      {elementRouter}
       <Toaster />
     </>
   )

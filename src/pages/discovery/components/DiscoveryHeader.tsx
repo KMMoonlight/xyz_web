@@ -1,4 +1,5 @@
 import {IImage} from "@/types/type"
+import * as React from 'react'
 
 interface DiscoverHeaderItem {
     id: string
@@ -20,7 +21,7 @@ interface DiscoverHeaderItem {
 }
 
 
-export default function DiscoveryHeader(props: {data: DiscoverHeaderItem[]}) {
+ const DiscoveryHeader: React.FC = (props: {data: DiscoverHeaderItem[]}) => {
     return (
         <>
             <div className="flex items-center mt-4 ml-4">
@@ -66,3 +67,6 @@ function hexToRgba(hex, opacity) {
 
     return `rgba(${r}, ${g}, ${b}, ${opacity})`
 }
+
+
+export default DiscoveryHeader

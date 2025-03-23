@@ -1,5 +1,5 @@
 import {Skeleton} from "@/components/ui/skeleton"
-
+import * as React from 'react'
 
 interface PropsType {
     length: number
@@ -7,7 +7,7 @@ interface PropsType {
 }
 
 
-export default function CommonSkeleton({length, cellLength=3}: PropsType) {
+const CommonSkeleton: React.FC = ({length, cellLength=3}: PropsType) => {
     return (
         <>
             { new Array(length).fill(1).map((_, index) => <SkeletonCell key={index} length={cellLength!}/>) }
@@ -16,7 +16,7 @@ export default function CommonSkeleton({length, cellLength=3}: PropsType) {
 }
 
 
-function SkeletonCell(props: {length: number}) {
+const SkeletonCell: React.FC = (props: {length: number}) => {
     return (
         <div className="flex items-center w-full justify-around pt-2">
             {
@@ -35,3 +35,6 @@ function SkeletonCell(props: {length: number}) {
         </div>
     )
 }
+
+
+export default CommonSkeleton

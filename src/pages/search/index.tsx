@@ -2,9 +2,10 @@ import {ISearchPreset} from "@/types/type"
 import {Input} from "@/components/ui/input"
 import {useEffect, useState} from "react"
 import { Search as SearchIcon } from 'lucide-react'
-import {api, request} from "@/utils";
+import {api, request} from "@/utils"
+import * as React from 'react'
 
-export default function Search() {
+const Search: React.FC = () => {
     const [searchValue, setSearchValue] = useState<string>('')
     const [searchPresetValue, setSearchPresetValue] = useState<string>('搜索')
     const [searchPresetData, setSearchPresetData] = useState<ISearchPreset[]>([])
@@ -55,3 +56,5 @@ export default function Search() {
         </div>
     )
 }
+
+export default Search

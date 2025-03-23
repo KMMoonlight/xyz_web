@@ -3,14 +3,25 @@ import { Button } from "@/components/ui/button"
 import {useEffect, useState} from "react"
 import { api, storage } from '@/utils/index'
 import { toast } from "sonner"
+import * as React from 'react'
+import {useNavigate} from "react-router"
+import { Loader2 } from "lucide-react"
+
 
 const phoneNumbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
 
-function LoginPage() {
+const LoginPage: React.FC = () => {
+
+
     const [phoneNumber, setPhoneNumber] = useState<string>('')
     const [smsCode, setSMSCode] = useState<string>('')
     const [loginDisabled, setLoginDisabled] = useState<boolean>(true)
     const [sendCodeDisabled, setSendCodeDisabled] = useState<boolean>(true)
+
+    const [sendCodeLoading, setSendCodeLoading] = useState<boolean>(false)
+    const [submitLoading, setSubmitLoading] = useState<boolean>(false)
+
+    const navigate = useNavigate()
 
     const onPhoneNumberInput = (e: any) => {
         setPhoneNumber(e.currentTarget.value)
@@ -29,6 +40,7 @@ function LoginPage() {
     const sendCode = () => {
         //发送验证码
         setSendCodeDisabled(true)
+        setSendCodeLoading(true)
         api.apiSendSMSCode({
             mobilePhoneNumber: phoneNumber,
             areaCode: '+86'
@@ -36,11 +48,13 @@ function LoginPage() {
             toast("发送成功!")
         }).finally(() => {
             setSendCodeDisabled(false)
+            setSendCodeLoading(false)
         })
     }
 
     const doLogin = () => {
         setLoginDisabled(true)
+        setSubmitLoading(true)
         api.apiLogin({
             areaCode: '+86',
             verifyCode: smsCode,
@@ -48,8 +62,10 @@ function LoginPage() {
         }).then((res: any) => {
             storage.setStorageItem('JikeUserInfo', JSON.stringify(res.data.user))
             toast("登录成功")
+            navigate('/', {replace: true})
         }).finally(() => {
             setLoginDisabled(false)
+            setSubmitLoading(false)
         })
     }
 
@@ -58,6 +74,13 @@ function LoginPage() {
         setLoginDisabled(() => phoneNumber.length !== 11 || smsCode.length !== 4)
     }, [phoneNumber, smsCode])
 
+    useEffect(() => {
+        const isLogin = storage.getStorageItem('XJikeAccessToken') && storage.getStorageItem('XJikeRefreshToken')
+
+        if (isLogin) {
+            navigate('/', {replace: true})
+        }
+    }, []);
 
     return (
         <>
@@ -70,11 +93,17 @@ function LoginPage() {
                 </div>
                 <div className="flex w-full max-w-sm items-center space-x-2 mt-4">
                     <Input value={smsCode} type="text" placeholder="请输入验证码" onInput={onSMSCodeInput}/>
-                    <Button disabled={sendCodeDisabled} onClick={sendCode}>发送验证码</Button>
+                    <Button disabled={sendCodeDisabled} onClick={sendCode}>
+                        {sendCodeLoading && <Loader2 className="animate-spin"/>}
+                        发送验证码
+                    </Button>
                 </div>
 
                 <div className="flex w-full max-w-sm items-center mt-4">
-                    <Button disabled={loginDisabled} onClick={doLogin} className="w-full">登录</Button>
+                    <Button disabled={loginDisabled} onClick={doLogin} className="w-full">
+                        {submitLoading && <Loader2 className="animate-spin"/>}
+                        登录
+                    </Button>
                 </div>
             </div>
         </>

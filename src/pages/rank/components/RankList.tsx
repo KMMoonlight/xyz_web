@@ -1,8 +1,8 @@
 import {IEpisode} from "@/types/type"
 import {CirclePlay} from "lucide-react"
+import * as React from 'react'
 
-
-export default function RankList(props: {data: {item: IEpisode}[]}) {
+const RankList: React.FC = (props: {data: {item: IEpisode}[]}) => {
     return (
         <div className="w-[600px]">
             {
@@ -34,3 +34,6 @@ export default function RankList(props: {data: {item: IEpisode}[]}) {
         </div>
     )
 }
+
+
+export default RankList
