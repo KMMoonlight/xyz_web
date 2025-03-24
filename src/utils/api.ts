@@ -335,3 +335,52 @@ interface IInboxUpdateParams {
 export function apiInboxUpdateList(data?: IInboxUpdateParams) {
     return rPost('/api/v1/inbox/list', data || {})
 }
+
+
+//获取用户信息
+export function apiGetProfile() {
+    return rGet('/api/v1/profile/get')
+}
+
+
+//获取用户统计数据 关注人数 粉丝数 订阅数
+export function apiGetUserState(params: {uid: string}) {
+    return rGet('/api/v1/user-stats/get', params)
+}
+
+
+//获取关注的人
+export function apiGetFollowingInfo(data: {uid: string}) {
+    return rPost('/api/v1/user-relation/list-following', data)
+}
+
+
+//获取关注我的人
+export function apiGetFollowerInfo(data: {uid: string}) {
+    return rPost('/api/v1/user-relation/list-follower', data)
+}
+
+
+//获取收听时长概览
+export function apiGetMileAge() {
+    return rGet('/api/v1/mileage/get')
+}
+
+interface IMileAgeRankParams {
+    rank: string //TOTAL  LAST_THIRTY_DAYS 全部，最近30天
+}
+
+//获取收听时长排行
+export function apiMileAgeRankList(data: IMileAgeRankParams) {
+    return rPost('/api/v1/mileage/list', data)
+}
+
+
+//收听历史
+interface IEpisodePlayedHistoryParams {
+    loadMoreKey?: string
+}
+
+export function apiEpisodePlayedHistory(data: IEpisodePlayedHistoryParams) {
+    return rPost('/api/v1/episode-played/list-history', data)
+}

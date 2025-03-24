@@ -2,7 +2,7 @@ import * as React from 'react'
 import {Link, Outlet} from "react-router-dom"
 import {useEffect, useMemo, useState} from "react"
 import cosmos from '@/assets/cosmos.svg'
-import {Podcast, User} from "lucide-react"
+import {Layers, User} from "lucide-react"
 import {storage} from "@/utils"
 import {useNavigate} from "react-router"
 
@@ -19,7 +19,7 @@ const BuildIconWithTitle: React.FC<{title: string, alias: string, navigate?: boo
 
     const iconSize = navigate ? 16 : 32
 
-    const icon = title === 'home' ? <img src={cosmos as string} style={{ width: iconSize, height: iconSize}} alt="cosmos"/> : title === 'subscription' ? <Podcast color="#25b4e1" size={iconSize}/> : <User color="#25b4e1" size={iconSize}/>
+    const icon = title === 'home' ? <img src={cosmos as string} style={{ width: iconSize, height: iconSize}} alt="cosmos"/> : title === 'subscription' ? <Layers color="#25b4e1" size={iconSize}/> : <User color="#25b4e1" size={iconSize}/>
 
     return (
         <div className={useClass}>

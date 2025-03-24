@@ -67,7 +67,7 @@ const SubscriptionPage: React.FC = () => {
 
 
     return (
-        <div className="flex flex-col w-[420px]">
+        <div className="flex flex-col w-[480px]">
             <div className="flex justify-end items-center mt-4">
                 <Button variant="outline" className="cursor-pointer" onClick={jumpToPodcastSubscription}>
                     <Layers size={18} color="#25b4e1"/>
@@ -93,7 +93,7 @@ const SubscriptionPage: React.FC = () => {
 const InboxList: React.FC<{ data: IEpisode[]}> = (props: {data: IEpisode[]}) => {
     return props.data.map((cell) => {
         return (
-            <div key={cell.eid} className="flex mt-8 w-[420px]">
+            <div key={cell.eid} className="flex mt-8 w-[480px]">
                 <div className="w-[64px]">
                     <img src={cell?.image?.thumbnailUrl || cell.podcast.image.thumbnailUrl}
                          className="w-[64px] h-[64px] rounded" alt="logo"/>

@@ -6,7 +6,7 @@ export interface IUser {
     }
     nickname: string
     isNicknameSet: boolean
-    bio: string
+    bio?: string
     gender: string
     isCancelled: boolean
     ipLoc: string
@@ -145,3 +145,18 @@ export interface ISubscriptionInboxUpdateList {
     }
 }
 
+
+export interface IMileAge {
+    lastSevenDayPlayedSeconds: number
+    lastThirtyDayPlayedSeconds: number
+    tagline: string
+    totalPlayedSeconds: number
+}
+
+
+export interface IUserState {
+    followerCount: number
+    followingCount: number
+    subscriptionCount: number
+    totalPlayedSeconds: number
+}
