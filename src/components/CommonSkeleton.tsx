@@ -7,7 +7,7 @@ interface PropsType {
 }
 
 
-const CommonSkeleton: React.FC = ({length, cellLength=3}: PropsType) => {
+const CommonSkeleton: React.FC<{length: number, cellLength?: number}> = ({length, cellLength=3}: PropsType) => {
     return (
         <>
             { new Array(length).fill(1).map((_, index) => <SkeletonCell key={index} length={cellLength!}/>) }
@@ -16,7 +16,7 @@ const CommonSkeleton: React.FC = ({length, cellLength=3}: PropsType) => {
 }
 
 
-const SkeletonCell: React.FC = (props: {length: number}) => {
+const SkeletonCell: React.FC<{length: number}> = (props: {length: number}) => {
     return (
         <div className="flex items-center w-full justify-around pt-2">
             {

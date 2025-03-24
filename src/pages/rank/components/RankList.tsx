@@ -2,7 +2,7 @@ import {IEpisode} from "@/types/type"
 import {CirclePlay} from "lucide-react"
 import * as React from 'react'
 
-const RankList: React.FC = (props: {data: {item: IEpisode}[]}) => {
+const RankList: React.FC<{data: {item: IEpisode}[]}> = (props: {data: {item: IEpisode}[]}) => {
     return (
         <div className="w-[600px]">
             {

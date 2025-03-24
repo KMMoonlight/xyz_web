@@ -48,7 +48,7 @@ const DiscoveryPage: React.FC = () => {
     return (
         <>
             <div className="w-full flex flex-col items-center">
-                { loading ? <CommonSkeleton length={3} className="mt-4"/> : (
+                { loading ? <div className="mt-4"><CommonSkeleton length={3} /></div> : (
                     <>
                         <DiscoveryHeader data={headerData}/>
                         <DiscoveryEpisodeRecommend data={recommendData}/>

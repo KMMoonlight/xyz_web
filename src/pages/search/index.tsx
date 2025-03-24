@@ -12,7 +12,7 @@ const Search: React.FC = () => {
 
     let interval: any = null
 
-    const onSearchInput = (e) => {
+    const onSearchInput = (e: any) => {
         setSearchValue(e.target.value)
     }
 

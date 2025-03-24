@@ -3,8 +3,8 @@ import {Link, Outlet} from "react-router-dom"
 import {useEffect, useMemo, useState} from "react"
 import cosmos from '@/assets/cosmos.svg'
 import {Podcast, User} from "lucide-react"
-import {storage} from "@/utils";
-import {useNavigate} from "react-router";
+import {storage} from "@/utils"
+import {useNavigate} from "react-router"
 
 
 const pageTitleMap: Record<string, string> = {
@@ -14,7 +14,7 @@ const pageTitleMap: Record<string, string> = {
 }
 
 
-const BuildIconWithTitle = React.memo(({title, alias , navigate = false}) => {
+const BuildIconWithTitle: React.FC<{title: string, alias: string, navigate?: boolean}> = React.memo(({title, alias , navigate = false}) => {
     const useClass = navigate ? 'text-sm flex items-center' : 'text-3xl flex items-center'
 
     const iconSize = navigate ? 16 : 32
@@ -32,7 +32,7 @@ const BuildIconWithTitle = React.memo(({title, alias , navigate = false}) => {
 })
 
 
-const NavigatorBar = React.memo(({changeCurrentTab}) => {
+const NavigatorBar: React.FC<{changeCurrentTab: (cell: string) => void}> = React.memo(({changeCurrentTab}) => {
     return (
         <>
             { Object.keys(pageTitleMap).map((cell)=> {

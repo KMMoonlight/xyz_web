@@ -23,9 +23,9 @@ interface DiscoveryEpisodeRecommendItem {
 }
 
 
-const DiscoveryEpisodeRecommend: React.FC = (props: {data: DiscoveryEpisodeRecommendItem}) => {
+const DiscoveryEpisodeRecommend: React.FC<{data: DiscoveryEpisodeRecommendItem}> = (props: {data: DiscoveryEpisodeRecommendItem}) => {
 
-    const [refreshData, setRefreshData] = useState<DiscoveryEpisodeRecommendItem>(null)
+    const [refreshData, setRefreshData] = useState<DiscoveryEpisodeRecommendItem | null>(null)
     const [refreshLoading, setRefreshLoading ] = useState<boolean>(false)
 
     const refreshRecommend = () => {

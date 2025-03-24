@@ -101,7 +101,17 @@ const RankPage: React.FC = () => {
     )
 }
 
-const RankListWrapper: React.FC = (props: { loading: boolean, data: {data: {item: IEpisode}[], publishDate: string} }) => {
+interface RankListWrapperProps {
+    loading: boolean
+    data: {
+        data: {
+            item: IEpisode
+        }[]
+        publishDate: string
+    }
+}
+
+const RankListWrapper: React.FC<RankListWrapperProps> = (props: RankListWrapperProps) => {
     const pubDateObj = props.data.publishDate ? new Date(props.data.publishDate) : null
     let pubDateStr = ''
 

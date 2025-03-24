@@ -21,7 +21,7 @@ interface DiscoverHeaderItem {
 }
 
 
- const DiscoveryHeader: React.FC = (props: {data: DiscoverHeaderItem[]}) => {
+ const DiscoveryHeader: React.FC<{data: DiscoverHeaderItem[]}> = (props: {data: DiscoverHeaderItem[]}) => {
     return (
         <>
             <div className="flex items-center mt-4 ml-4">
@@ -53,7 +53,7 @@ function HeaderItem(item: DiscoverHeaderItem) {
 }
 
 
-function hexToRgba(hex, opacity) {
+function hexToRgba(hex: string, opacity: number) {
     // 移除 # 号并处理缩写格式
     let formattedHex = hex.replace(/^#/, '');
     if (formattedHex.length === 3) {

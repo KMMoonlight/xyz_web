@@ -1,13 +1,158 @@
 import * as React from 'react'
+import {useEffect, useState} from "react"
+import {api, request, showPubDateDiffDisplay, transferTimeDurationToMinutes} from '@/utils/index'
+import {IEpisode, ISubscriptionInboxUpdateList} from "@/types/type"
+import {
+    CirclePlay,
+    Ellipsis,
+    Headphones,
+    Layers,
+    ListPlus, Loader2,
+    MessageSquareMore,
+    MessageSquareText,
+} from "lucide-react"
+import {Button} from "@/components/ui/button.tsx"
+import {useNavigate} from "react-router"
 
 
 const SubscriptionPage: React.FC = () => {
+
+    const navigate = useNavigate()
+
+    const [loading, setLoading] = useState(false)
+    const [loadMoreKey, setLoadMoreKey] = useState<{id: string, pubDate: string} | undefined>(undefined)
+    const [inboxList, setInboxList] = useState<ISubscriptionInboxUpdateList | null>(null)
+    const [hasMore, setHasMore] = useState<boolean>(true)
+
+    const queryInboxList = (isLoad = true) => {
+        setLoading(true)
+        const params = isLoad && loadMoreKey ? { loadMoreKey } : undefined
+        api.apiInboxUpdateList(params).then((res) => {
+            setInboxList((val) => {
+                if (!val) return res
+
+                return {
+                    ...val,
+                    data: val?.data.concat(res.data)
+                }
+            })
+
+            if (res.loadMoreKey) {
+                setLoadMoreKey(res.loadMoreKey)
+                setHasMore(true)
+            }else {
+                setHasMore(false)
+            }
+        }).catch((e: any) => {
+            if (e.status === 401) {
+                request.reCallOn401(queryInboxList, isLoad)
+            }
+        }).finally(() => {
+            setLoading(false)
+        })
+    }
+
+    const loadMore = () => {
+        queryInboxList()
+    }
+
+    const jumpToPodcastSubscription = () => {
+        navigate('/overview/subscription/podcasts')
+    }
+
+
+    useEffect(() => {
+        queryInboxList(false)
+    }, [])
+
+
     return (
-        <div>
-            Subscription
+        <div className="flex flex-col w-[420px]">
+            <div className="flex justify-end items-center mt-4">
+                <Button variant="outline" className="cursor-pointer" onClick={jumpToPodcastSubscription}>
+                    <Layers size={18} color="#25b4e1"/>
+                    <span className="ml-2">我的订阅</span>
+                </Button>
+            </div>
+            <div className="flex flex-col w-full items-center">
+                <InboxList data={inboxList?.data || []}/>
+                {
+                    hasMore ? <Button variant="outline" className="cursor-pointer mt-4 mb-4" disabled={loading} onClick={loadMore}>
+                                    {loading && <Loader2 className="animate-spin"/>}
+                                    <span className="text-neutral-400 text-sm">
+                                        加载更多
+                                    </span>
+                    </Button> : <span className="text-neutral-400 text-sm mt-4 mb-4">没有更多了</span>
+                }
+            </div>
         </div>
     )
 }
 
+
+const InboxList: React.FC<{ data: IEpisode[]}> = (props: {data: IEpisode[]}) => {
+    return props.data.map((cell) => {
+        return (
+            <div key={cell.eid} className="flex mt-8 w-[420px]">
+                <div className="w-[64px]">
+                    <img src={cell?.image?.thumbnailUrl || cell.podcast.image.thumbnailUrl}
+                         className="w-[64px] h-[64px] rounded" alt="logo"/>
+                </div>
+                <div className="flex flex-col flex-1 ml-2">
+                    <div className="line-clamp-2 text-neutral-900 text-sm font-bold cursor-pointer">
+                        {cell.title}
+                    </div>
+                    <div className="line-clamp-2 text-neutral-400 text-sm cursor-pointe">
+                        {cell.description}
+                    </div>
+                    <div className="flex w-full text-neutral-400 text-xs mt-2 pr-3">
+                        <div className="flex items-center">
+                                            <span>
+                                               {transferTimeDurationToMinutes(cell.duration)}分钟
+                                            </span>
+                        </div>
+                        <span className="mx-1">
+                                            ·
+                                        </span>
+                        <div className="flex items-center">
+                                            <span>
+                                               {showPubDateDiffDisplay(cell.pubDate)}
+                                            </span>
+                        </div>
+                        <span className="mx-1">
+                                            ·
+                                        </span>
+                        <div className="flex items-center">
+                            <Headphones size={12}/>
+                            <span className="ml-1">
+                                                {cell.playCount}
+                                            </span>
+                        </div>
+                        <span className="mx-1">
+                                            ·
+                                        </span>
+                        <div className="flex items-center">
+                            <MessageSquareText size={12}/>
+                            <span className="ml-1">
+                                                {cell.commentCount}
+                                            </span>
+                        </div>
+                    </div>
+
+                    <div className="flex justify-between items-center mt-2">
+                        <div className="flex items-center">
+                            <ListPlus size={26} color="#25b4e1" className="cursor-pointer"/>
+
+                            <MessageSquareMore size={26} color="#25b4e1" className="cursor-pointer ml-4"/>
+
+                            <Ellipsis size={26} color="#25b4e1" className="cursor-pointer ml-4"/>
+                        </div>
+                        <CirclePlay color="#25b4e1" size={26} className="cursor-pointer"/>
+                    </div>
+                </div>
+            </div>
+        )
+    })
+}
 
 export default SubscriptionPage

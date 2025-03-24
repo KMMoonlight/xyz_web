@@ -37,9 +37,9 @@ interface ISubscribeListParams {
 export function apiGetSubscription(data: ISubscribeListParams) {
     const postData = {
         ...data,
-        list: '20',
+        limit: '100',
         sortOrder: 'desc',
-        sortBy: 'subscribeAt',
+        sortBy: 'subscribedAt',
     }
     return rPost('/api/v1/subscription/list', postData)
 }
@@ -324,6 +324,14 @@ export function apiGetRankList(params: IRankCategoryParams) {
 
 
 
+//订阅更新列表
+interface IInboxUpdateParams {
+    loadMoreKey: {
+        id: string
+        pubDate: string
+    }
+}
 
-
-
+export function apiInboxUpdateList(data?: IInboxUpdateParams) {
+    return rPost('/api/v1/inbox/list', data || {})
+}

@@ -31,7 +31,7 @@ interface DiscoveryEditorPickItem {
     }
 }
 
-const DiscoveryEditorPick: React.FC = (props: {data: DiscoveryEditorPickItem[]}) => {
+const DiscoveryEditorPick: React.FC<{data: DiscoveryEditorPickItem[]}> = (props: {data: DiscoveryEditorPickItem[]}) => {
     return (
         <>
             <div className="text-2xl ml-4 mt-20 w-[30%]" style={{color: '#25b4e1'}}>

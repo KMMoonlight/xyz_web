@@ -30,6 +30,45 @@ export interface IImage {
     height?: number
 }
 
+export interface IPodcast {
+    type: string
+    pid: string
+    title: string
+    author: string
+    brief: string
+    description: string
+    subscriptionCount: number
+    image: IImage
+    color: {
+        original: string
+        light: string
+        dark: string
+    }
+    hasTopic: boolean
+    topicLabels: string[]
+    syncMode: string
+    episodeCount: number
+    latestEpisodePubDate: string
+    subscriptionPush: boolean
+    subscriptionPushPriority: string
+    subscriptionStar: boolean
+    status: string
+    permissions: IPermission[]
+    payType: string
+    payEpisodeCount: number
+    podcasters: IUser[]
+    hasPopularEpisodes: boolean
+    contacts: {
+        type: string
+        name: string
+        url?: string
+        note?: string
+    }[]
+    isCustomized: boolean
+    showZhuiguangIcon: boolean
+    subscriptionOftenPlayed?: boolean
+}
+
 export interface IEpisode {
     type: string
     eid: string
@@ -59,43 +98,7 @@ export interface IEpisode {
     pubDate: string
     status: string
     duration: number
-    podcast: {
-        type: string
-        pid: string
-        title: string
-        author: string
-        brief: string
-        description: string
-        subscriptionCount: number
-        image: IImage
-        color: {
-            original: string
-            light: string
-            dark: string
-        }
-        hasTopic: boolean
-        topicLabels: string[]
-        syncMode: string
-        episodeCount: number
-        latestEpisodePubDate: string
-        subscriptionPush: boolean
-        subscriptionPushPriority: string
-        subscriptionStar: boolean
-        status: string
-        permissions: IPermission[]
-        payType: string
-        payEpisodeCount: number
-        podcasters: IUser[]
-        hasPopularEpisodes: boolean
-        contacts: {
-            type: string
-            name: string
-            url?: string
-            note?: string
-        }[]
-        isCustomized: boolean
-        showZhuiguangIcon: boolean
-    }
+    podcast: IPodcast
     isPlayed: boolean
     isFinished: boolean
     isPicked: boolean
@@ -133,3 +136,12 @@ export interface IRankListItem {
     rulesUrl: string
     background: string
 }
+
+export interface ISubscriptionInboxUpdateList {
+    data: IEpisode[]
+    loadMoreKey: {
+        id: string
+        pubDate: string
+    }
+}
+
