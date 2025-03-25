@@ -143,7 +143,7 @@ export function apiEpisodePopular(data: IEpisodePopularParams) {
 
 //查询单集详情
 export function apiEpisodeDetail(params: {eid: string}) {
-    return rGet('/api/episode/get', params)
+    return rGet('/api/v1/episode/get', params)
 }
 
 

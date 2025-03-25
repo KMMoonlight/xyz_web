@@ -118,3 +118,14 @@
     @apply bg-background text-foreground;
   }
 }
+
+.show-notes {
+  p {
+    margin-top: 20px;
+  }
+
+  .highlight-time {
+    color: #ebb434;
+    text-decoration: underline;
+  }
+}
