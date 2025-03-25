@@ -91,9 +91,18 @@ const SubscriptionPage: React.FC = () => {
 
 
 const InboxList: React.FC<{ data: IEpisode[]}> = (props: {data: IEpisode[]}) => {
-    return props.data.map((cell) => {
+
+    const navigate = useNavigate()
+
+
+    const jumpToEpisodeDetail = (index: number) =>  {
+        const targetEpisode = props.data[index]
+        navigate(`/overview/episode/${targetEpisode.eid}`)
+    }
+
+    return props.data.map((cell, index) => {
         return (
-            <div key={cell.eid} className="flex mt-8 w-[480px]">
+            <div key={cell.eid} className="flex mt-8 w-[480px]" onClick={() => jumpToEpisodeDetail(index)}>
                 <div className="w-[64px]">
                     <img src={cell?.image?.thumbnailUrl || cell.podcast.image.thumbnailUrl}
                          className="w-[64px] h-[64px] rounded" alt="logo"/>

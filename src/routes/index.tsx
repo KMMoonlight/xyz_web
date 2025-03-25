@@ -6,6 +6,7 @@ import {RouteObject} from "react-router-dom"
 import SubscriptionPage from "@/pages/subscription/index"
 import UserPage from "@/pages/user/index"
 import SubscriptionPodcastPage from "@/pages/subscription_podcast"
+import EpisodePage from '@/pages/episode/index'
 
 const routes: RouteObject[] = [
     {
@@ -31,6 +32,10 @@ const routes: RouteObject[] = [
             {
                 path: '/overview/subscription/podcasts',
                 element: <SubscriptionPodcastPage/>
+            },
+            {
+                path: '/overview/episode/:episodeId',
+                element: <EpisodePage />
             }
         ]
     },

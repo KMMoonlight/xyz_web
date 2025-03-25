@@ -12,15 +12,16 @@ import {Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger} fr
 import {useNavigate} from "react-router";
 import {Headphones, MessageSquareText} from "lucide-react"
 import Plant from '@/assets/plant.gif'
+import CommonSkeleton from "@/components/CommonSkeleton.tsx";
 
 
 const UserPage: React.FC = () => {
 
     const [userInfo, setUserInfo] = useState<IUser | undefined>(undefined)
-
     const [mileAgeInfo, setMileAgeInfo] = useState<IMileAge | undefined>(undefined)
     const [userState, setUserState] = useState<IUserState | undefined>(undefined)
     const [playedHistoryList, setPlayedHistoryList ] = useState<IEpisode[]>([])
+    const [playedHistoryLoading, setPlayedHistoryLoading] = useState<boolean>(false)
 
     //获取个人信息
     const queryUserProfile = () => {
@@ -59,12 +60,15 @@ const UserPage: React.FC = () => {
 
 
     const queryPlayedHistory = () => {
+        setPlayedHistoryLoading(true)
         api.apiEpisodePlayedHistory({}).then((res) => {
             setPlayedHistoryList(res.data.map((cell: any) => cell.episode))
         }).catch((e) => {
             if (e.status === 401) {
                 request.reCallOn401(queryPlayedHistory)
             }
+        }).finally(() => {
+            setPlayedHistoryLoading(false)
         })
     }
 
@@ -118,7 +122,7 @@ const UserPage: React.FC = () => {
             <UserBasicInfo data={userBasicInfo} />
             <UserFollowInfo data={userFollowInfo} />
             {mileAgeInfo && <MileageRankInfo data={mileAgeInfo as IMileAge}/> }
-            <PlayedHistoryList data={playedHistoryList}/>
+            { playedHistoryLoading ? <CommonSkeleton length={3} cellLength={1} /> : <PlayedHistoryList data={playedHistoryList}/> }
         </div>
     )
 }
