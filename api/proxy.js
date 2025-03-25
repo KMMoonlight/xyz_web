@@ -9,6 +9,9 @@ export default function (req, res) {
 
   createProxyMiddleware({
     target,
-    changeOrigin: true
+    changeOrigin: true,
+    pathRewrite: {
+      "^/api": "",
+    },
   })(req, res)
 }
