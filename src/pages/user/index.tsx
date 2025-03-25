@@ -60,7 +60,7 @@ const UserPage: React.FC = () => {
 
     const queryPlayedHistory = () => {
         api.apiEpisodePlayedHistory({}).then((res) => {
-            setPlayedHistoryList(res.data.map((cell) => cell.episode))
+            setPlayedHistoryList(res.data.map((cell: any) => cell.episode))
         }).catch((e) => {
             if (e.status === 401) {
                 request.reCallOn401(queryPlayedHistory)
