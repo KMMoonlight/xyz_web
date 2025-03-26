@@ -107,7 +107,7 @@ export function apiGetSearchPreset() {
 
 
 //节目列表
-interface IEpisodeParams {
+export interface IEpisodeParams {
     pid: string
     order: string //desc asc
     loadMoreKey?: {

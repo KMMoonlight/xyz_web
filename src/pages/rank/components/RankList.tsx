@@ -13,6 +13,11 @@ const RankList: React.FC<{ data: { item: IEpisode }[] }> = (props: {
     navigate(`/overview/episode/${targetEpisode.item.eid}`);
   };
 
+  const goToPodcast = (index: number) => {
+    const podcastId = props.data[index].item.podcast.pid;
+    navigate(`/overview/podcast/${podcastId}`);
+  };
+
   return (
     <div className="w-[600px]">
       {props.data.map((item, index) => {
@@ -37,7 +42,10 @@ const RankList: React.FC<{ data: { item: IEpisode }[] }> = (props: {
                 >
                   {cell.title}
                 </div>
-                <div className="text-sm text-neutral-400 mb-[1px]">
+                <div
+                  className="text-sm text-neutral-400 mb-[1px] cursor-pointer"
+                  onClick={() => goToPodcast(index)}
+                >
                   {cell.podcast.title}
                 </div>
               </div>

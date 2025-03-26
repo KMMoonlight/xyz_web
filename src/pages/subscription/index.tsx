@@ -76,8 +76,8 @@ const SubscriptionPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="flex flex-col w-[480px]">
-      <div className="flex justify-end items-center mt-4">
+    <div className="flex flex-col w-full items-center">
+      <div className="flex justify-end items-center mt-4 w-[540px]">
         <Button
           variant="outline"
           className="cursor-pointer"
@@ -87,7 +87,7 @@ const SubscriptionPage: React.FC = () => {
           <span className="ml-2">我的订阅</span>
         </Button>
       </div>
-      <div className="flex flex-col w-full items-center">
+      <div className="flex flex-col max-h-[calc(100vh-130px)] overflow-y-auto w-full items-center pl-[20px] pr-[20px]">
         <InboxList data={inboxList?.data || []} />
         {hasMore ? (
           <Button
@@ -119,7 +119,7 @@ const InboxList: React.FC<{ data: IEpisode[] }> = (props: {
 
   return props.data.map((cell, index) => {
     return (
-      <div key={cell.eid} className="flex mt-8 w-[480px]">
+      <div key={cell.eid} className="flex mt-8 w-[540px]">
         <div className="w-[64px]">
           <img
             src={cell.podcast.image.thumbnailUrl}

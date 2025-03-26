@@ -18,7 +18,7 @@ import CommonSkeleton from "@/components/CommonSkeleton.tsx";
 const UserPage: React.FC = () => {
   const [userInfo, setUserInfo] = useState<IUser | undefined>(undefined);
   const [mileAgeInfo, setMileAgeInfo] = useState<IMileAge | undefined>(
-    undefined,
+    undefined
   );
   const [userState, setUserState] = useState<IUserState | undefined>(undefined);
   const [playedHistoryList, setPlayedHistoryList] = useState<IEpisode[]>([]);
@@ -130,7 +130,7 @@ const UserPage: React.FC = () => {
   }, [userState]);
 
   return (
-    <div>
+    <div className="w-full flex flex-col items-center">
       <UserBasicInfo data={userBasicInfo} />
       <UserFollowInfo data={userFollowInfo} />
       {mileAgeInfo && <MileageRankInfo data={mileAgeInfo as IMileAge} />}
@@ -166,7 +166,7 @@ const UserBasicInfo: React.FC<{ data: IUserBasicInfo }> = React.memo(
         )}
       </div>
     );
-  },
+  }
 );
 
 const UserFollowInfo: React.FC<{ data: IUserState }> = React.memo(
@@ -302,7 +302,7 @@ const UserFollowInfo: React.FC<{ data: IUserState }> = React.memo(
         </div>
       </div>
     );
-  },
+  }
 );
 
 // enum MileageType {
@@ -390,7 +390,7 @@ const MileageRankInfo: React.FC<{ data: IMileAge }> = React.memo(
         {/*</div>*/}
       </div>
     );
-  },
+  }
 );
 
 const PlayedHistoryList: React.FC<{ data: IEpisode[] }> = React.memo(
@@ -402,15 +402,20 @@ const PlayedHistoryList: React.FC<{ data: IEpisode[] }> = React.memo(
       navigate(`/overview/episode/${targetEpisode.eid}`);
     };
 
+    const goToPodcast = (index: number) => {
+      const podcastId = props.data[index]?.podcast.pid;
+      navigate(`/overview/podcast/${podcastId}`);
+    };
+
     return (
-      <div className="mt-6">
-        <div className="text-2xl" style={{ color: "#25b4e1" }}>
+      <div className="mt-6 w-full flex flex-col items-center">
+        <div className="text-2xl mb-2" style={{ color: "#25b4e1" }}>
           最近听过
         </div>
-        <div className="max-h-[calc(100vh-380px)] overflow-auto">
+        <div className="max-h-[calc(100vh-380px)] w-full overflow-auto flex flex-col items-center">
           {props.data.map((cell, index) => {
             return (
-              <div key={cell.eid} className="flex mt-8 w-[480px]">
+              <div key={cell.eid} className="flex mb-4 w-[480px]">
                 <div className="w-[64px]">
                   <img
                     src={cell.podcast.image.thumbnailUrl}
@@ -429,7 +434,10 @@ const PlayedHistoryList: React.FC<{ data: IEpisode[] }> = React.memo(
                   <div className="line-clamp-2 text-neutral-400 text-sm cursor-pointe">
                     {cell.description}
                   </div>
-                  <div className="flex w-full text-neutral-400 text-xs mt-2 pr-3">
+                  <div
+                    className="flex w-full text-neutral-400 text-xs mt-2 pr-3 cursor-pointer"
+                    onClick={() => goToPodcast(index)}
+                  >
                     <div>{cell.podcast.title}</div>
                     <div className="flex items-center ml-4">
                       <Headphones size={12} />
@@ -448,7 +456,7 @@ const PlayedHistoryList: React.FC<{ data: IEpisode[] }> = React.memo(
         </div>
       </div>
     );
-  },
+  }
 );
 
 export default UserPage;

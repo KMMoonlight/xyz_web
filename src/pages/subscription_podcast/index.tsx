@@ -62,29 +62,35 @@ const SubscriptionPodcastPage: React.FC = () => {
 
   return (
     <>
-      <div className="w-[480px]">
+      <div className="w-[540px]">
         <ChevronLeft
           size={32}
           color="#25b4e1"
-          className=" ml-[-60px] cursor-pointer mt-2"
+          className="ml-[-60px] cursor-pointer mt-2"
           onClick={backTo}
         />
       </div>
 
-      <GridPodcastList data={podcastList} />
-      {hasMore ? (
-        <Button
-          variant="outline"
-          className="cursor-pointer mt-4 mb-4"
-          disabled={loading}
-          onClick={loadMore}
-        >
-          {loading && <Loader2 className="animate-spin" />}
-          <span className="text-neutral-400 text-sm">加载更多</span>
-        </Button>
-      ) : (
-        <span className="text-neutral-400 text-sm mt-4 mb-4">没有更多了</span>
-      )}
+      <div className="max-h-[calc(100vh-130px)] overflow-y-auto w-full flex flex-col items-center">
+        <GridPodcastList data={podcastList} />
+        <div className="w-full flex justify-center w-[540px]">
+          {hasMore ? (
+            <Button
+              variant="outline"
+              className="cursor-pointer mt-4 mb-4"
+              disabled={loading}
+              onClick={loadMore}
+            >
+              {loading && <Loader2 className="animate-spin" />}
+              <span className="text-neutral-400 text-sm">加载更多</span>
+            </Button>
+          ) : (
+            <span className="text-neutral-400 text-sm mt-4 mb-4">
+              没有更多了
+            </span>
+          )}
+        </div>
+      </div>
     </>
   );
 };
@@ -92,19 +98,22 @@ const SubscriptionPodcastPage: React.FC = () => {
 const GridPodcastList: React.FC<{ data: IPodcast[] }> = (props: {
   data: IPodcast[];
 }) => {
-
   const navigate = useNavigate();
 
   const goToPodcast = (index: number) => {
     const podcastId = props.data[index].pid;
     navigate(`/overview/podcast/${podcastId}`);
-  }
+  };
 
   return (
-    <div className="grid grid-flow grid-cols-3 gap-2 w-[480px] mt-4">
+    <div className="grid grid-flow grid-cols-3 gap-2 w-[540px] mt-4">
       {props.data.map((cell, index) => {
         return (
-          <div key={cell.pid} className="relative cursor-pointer" onClick={() => goToPodcast(index)}>
+          <div
+            key={cell.pid}
+            className="relative cursor-pointer"
+            onClick={() => goToPodcast(index)}
+          >
             <img
               src={cell.image.smallPicUrl}
               alt="logo"

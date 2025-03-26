@@ -57,6 +57,11 @@ const DiscoveryEpisodeRecommend: React.FC<{
     navigate(`/overview/episode/${targetEpisode.episode.eid}`);
   };
 
+  const goToPodcast = (index: number) => {
+    const podcastId = useData.target[index].episode.podcast.pid;
+    navigate(`/overview/podcast/${podcastId}`);
+  };
+
   return (
     <>
       <div className="ml-4 mt-4 flex w-[30%] justify-between">
@@ -75,12 +80,12 @@ const DiscoveryEpisodeRecommend: React.FC<{
           <span className="text-neutral-400 text-sm">换一换</span>
         </Button>
       </div>
-      <div className="mt-2 flex flex-wrap gap-4 justify-start items-center">
+      <div className="mt-2 flex flex-col justify-start items-center">
         {useData.target.map((cell, index) => {
           return (
             <div
               key={cell.episode.eid}
-              className="w-[420px] h-[120px] mx-4 rounded-md border border-neutral-100 shadow-sm"
+              className="w-[420px] h-[120px] mx-4 rounded-md border border-neutral-100 shadow-sm mb-6"
             >
               <div className="flex mx-4 my-2">
                 <img
@@ -91,7 +96,10 @@ const DiscoveryEpisodeRecommend: React.FC<{
                 />
                 <div className="flex flex-1 items-center justify-between">
                   <div className="flex flex-col h-full ml-2 mr-2">
-                    <span className="text-neutral-400 text-sm">
+                    <span
+                      className="text-neutral-400 text-sm cursor-pointer"
+                      onClick={() => goToPodcast(index)}
+                    >
                       {cell.episode.podcast.author !== "佚名"
                         ? cell.episode.podcast.author
                         : cell.episode.podcast.title}

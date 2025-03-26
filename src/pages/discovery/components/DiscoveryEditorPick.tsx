@@ -42,17 +42,22 @@ const DiscoveryEditorPick: React.FC<{
     navigate(`/overview/episode/${targetEpisode.episode.eid}`);
   };
 
+  const goToPodcast = (index: number) => {
+    const podcastId = props.data[index].episode.podcast.pid;
+    navigate(`/overview/podcast/${podcastId}`);
+  };
+
   return (
     <>
-      <div className="text-2xl ml-4 mt-20 w-[30%]" style={{ color: "#25b4e1" }}>
+      <div className="text-2xl ml-4 mt-4 w-[30%]" style={{ color: "#25b4e1" }}>
         编辑精选
       </div>
-      <div className="mt-2 flex flex-wrap gap-4 justify-start items-center">
+      <div className="mt-2 max-w-[440px] flex flex-col justify-start items-center">
         {props.data.map((cell, index) => {
           return (
             <div
               key={cell.episode.eid}
-              className="max-w-[420px] h-[194px] mx-4 rounded-md border border-neutral-100 shadow-sm"
+              className="h-[194px] mx-4 rounded-md border border-neutral-100 shadow-sm mb-6"
             >
               <div className="flex justify-around mx-4 my-2">
                 <img
@@ -64,7 +69,10 @@ const DiscoveryEditorPick: React.FC<{
 
                 <div className="flex flex-1 items-center justify-between">
                   <div className="flex flex-col h-full ml-2 mr-2">
-                    <span className="text-neutral-400 text-sm">
+                    <span
+                      className="text-neutral-400 text-sm cursor-pointer"
+                      onClick={() => goToPodcast(index)}
+                    >
                       {cell.episode.podcast.author !== "佚名"
                         ? cell.episode.podcast.author
                         : cell.episode.podcast.title}
