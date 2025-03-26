@@ -73,6 +73,11 @@ const EpisodePage: React.FC = () => {
     return map;
   }, [detailData]);
 
+  const podcastColor = useMemo(() => {
+    return detailData?.podcast?.color?.light || '#ebb434'
+  }, [detailData])
+
+
   useEffect(() => {
     queryEpisodeDetail();
   }, []);
@@ -91,7 +96,7 @@ const EpisodePage: React.FC = () => {
         <div className="mt-4 w-[480px]">
           <ChevronLeft
             size={32}
-            color="#ebb434"
+            color={podcastColor}
             className="ml-[-60px] cursor-pointer"
             onClick={backTo}
           />
@@ -107,7 +112,7 @@ const EpisodePage: React.FC = () => {
                   {detailData?.payType === "PAY_EPISODE" ? (
                     <CircleDollarSign
                       size={22}
-                      color="#ebb434"
+                      color={podcastColor}
                       className="inline align-text-bottom mr-2"
                     />
                   ) : (
@@ -116,12 +121,12 @@ const EpisodePage: React.FC = () => {
                 </span>
                 <span className="text-xl font-bold">{detailData?.title}</span>
               </div>
-              <span className="text-sm mt-4" style={{ color: "#ebb434" }}>
+              <span className="text-sm mt-4" style={{ color: podcastColor }}>
                 {detailData?.podcast.title}
                 <span className="ml-2">&gt;</span>
               </span>
             </div>
-            <CirclePlay color="#ebb434" size={32} className="cursor-pointer" />
+            <CirclePlay color={podcastColor} size={32} className="cursor-pointer" />
           </div>
           <div className="flex justify-between items-center mt-4">
             <div className="flex items-center text-sm text-neutral-400">
@@ -134,7 +139,7 @@ const EpisodePage: React.FC = () => {
             <div className="flex items-center">
               <ListPlus
                 size={26}
-                color={permissionMap["PAY"] ? "#ebb434" : "#ebb43488"}
+                color={permissionMap["PAY"] ? podcastColor : podcastColor + '88'}
                 className={
                   permissionMap["PAY"] ? "cursor-pointer" : "cursor-not-allowed"
                 }
@@ -142,7 +147,7 @@ const EpisodePage: React.FC = () => {
 
               <MessageSquareMore
                 size={26}
-                color={permissionMap["COMMENT_PAGE"] ? "#ebb434" : "#ebb43488"}
+                color={permissionMap["COMMENT_PAGE"] ? podcastColor : podcastColor + '88'}
                 className={
                   permissionMap["COMMENT_PAGE"]
                     ? "cursor-pointer ml-6"

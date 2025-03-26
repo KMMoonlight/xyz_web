@@ -92,11 +92,19 @@ const SubscriptionPodcastPage: React.FC = () => {
 const GridPodcastList: React.FC<{ data: IPodcast[] }> = (props: {
   data: IPodcast[];
 }) => {
+
+  const navigate = useNavigate();
+
+  const goToPodcast = (index: number) => {
+    const podcastId = props.data[index].pid;
+    navigate(`/overview/podcast/${podcastId}`);
+  }
+
   return (
     <div className="grid grid-flow grid-cols-3 gap-2 w-[480px] mt-4">
-      {props.data.map((cell) => {
+      {props.data.map((cell, index) => {
         return (
-          <div key={cell.pid} className="relative">
+          <div key={cell.pid} className="relative cursor-pointer" onClick={() => goToPodcast(index)}>
             <img
               src={cell.image.smallPicUrl}
               alt="logo"

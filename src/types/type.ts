@@ -53,6 +53,7 @@ export interface IPodcast {
   subscriptionPushPriority: string;
   subscriptionStar: boolean;
   status: string;
+  subscriptionStatus?: string;
   permissions: IPermission[];
   payType: string;
   payEpisodeCount: number;
