@@ -8,6 +8,7 @@ import UserPage from "@/pages/user/index";
 import SubscriptionPodcastPage from "@/pages/subscription_podcast";
 import EpisodePage from "@/pages/episode/index";
 import PodcastPage from "@/pages/podcast/index";
+import PodcasterPage from "@/pages/podcaster/index";
 
 const routes: RouteObject[] = [
   {
@@ -31,7 +32,7 @@ const routes: RouteObject[] = [
         element: <UserPage />,
       },
       {
-        path: "/overview/subscription/podcasts",
+        path: "/overview/subscription/podcasts/:uid",
         element: <SubscriptionPodcastPage />,
       },
       {
@@ -41,6 +42,10 @@ const routes: RouteObject[] = [
       {
         path: "/overview/podcast/:podcastId",
         element: <PodcastPage />,
+      },
+      {
+        path: "/overview/podcaster/:uid",
+        element: <PodcasterPage />,
       },
     ],
   },

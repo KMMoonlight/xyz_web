@@ -57,7 +57,7 @@ const DiscoveryPage: React.FC = () => {
       <div className="w-full flex flex-col items-center">
         {loading ? (
           <div className="mt-4">
-            <CommonSkeleton length={3} />
+            <CommonSkeleton length={3} cellLength={1} />
           </div>
         ) : (
           <>

@@ -2,6 +2,7 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import {
   api,
+  getUserID,
   request,
   showPubDateDiffDisplay,
   transferTimeDurationToMinutes,
@@ -68,7 +69,7 @@ const SubscriptionPage: React.FC = () => {
   };
 
   const jumpToPodcastSubscription = () => {
-    navigate("/overview/subscription/podcasts");
+    navigate(`/overview/subscription/podcasts/${getUserID()}`);
   };
 
   useEffect(() => {

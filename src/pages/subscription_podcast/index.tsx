@@ -1,12 +1,13 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { api, getUserID, request } from "@/utils/index";
+import { api, request } from "@/utils/index";
 import { IPodcast } from "@/types/type";
 import { Button } from "@/components/ui/button.tsx";
 import { ChevronLeft, Loader2 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const SubscriptionPodcastPage: React.FC = () => {
+  const params = useParams();
   const [loading, setLoading] = useState<boolean>(false);
   const [podcastList, setPodcastList] = useState<IPodcast[]>([]);
   const [hasMore, setHasMore] = useState<boolean>(true);
@@ -17,13 +18,13 @@ const SubscriptionPodcastPage: React.FC = () => {
   const querySubscriptionPodcastList = (load: boolean) => {
     setLoading(true);
 
-    const params: any =
+    const queryParams: any =
       load && loadMoreKey
-        ? { uid: getUserID(), loadMoreKey }
-        : { uid: getUserID() };
+        ? { uid: params.uid || "", loadMoreKey }
+        : { uid: params.uid || "" };
 
     api
-      .apiGetSubscription(params)
+      .apiGetSubscription(queryParams)
       .then((res) => {
         if (res.loadMoreKey) {
           setLoadMoreKey(res.loadMoreKey);

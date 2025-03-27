@@ -107,6 +107,10 @@ const PodcastPage: React.FC = () => {
     navigate(`/overview/episode/${targetEpisode.eid}`);
   };
 
+  const jumpToPodcaster = (uid: string) => {
+    navigate(`/overview/podcaster/${uid}`);
+  };
+
   const backTo = () => {
     navigate(-1);
   };
@@ -114,7 +118,7 @@ const PodcastPage: React.FC = () => {
   return (
     <div className="mt-4 w-full">
       {loading ? (
-        <CommonSkeleton length={3} />
+        <CommonSkeleton length={3} cellLength={1} />
       ) : (
         <div className="w-full flex flex-col items-center">
           <div className="w-[580px]">
@@ -136,10 +140,14 @@ const PodcastPage: React.FC = () => {
               >
                 {podcast?.description}
               </div>
-              <div className="flex items-center">
+              <div className="flex flex-wrap items-center">
                 {podcast?.podcasters.map((cell) => {
                   return (
-                    <div className="flex items-center mt-2 mr-4" key={cell.uid}>
+                    <div
+                      className="flex items-center mt-2 mr-4 cursor-pointer"
+                      key={cell.uid}
+                      onClick={() => jumpToPodcaster(cell.uid)}
+                    >
                       <img
                         src={cell?.avatar?.picture?.thumbnailUrl}
                         className="w-[24px] h-[24px] rounded"

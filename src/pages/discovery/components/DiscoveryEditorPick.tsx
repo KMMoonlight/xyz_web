@@ -73,9 +73,7 @@ const DiscoveryEditorPick: React.FC<{
                       className="text-neutral-400 text-sm cursor-pointer"
                       onClick={() => goToPodcast(index)}
                     >
-                      {cell.episode.podcast.author !== "佚名"
-                        ? cell.episode.podcast.author
-                        : cell.episode.podcast.title}
+                      {cell.episode.podcast.title}
                     </span>
                     <span
                       className="line-clamp-2 color-neutral-900 text-sm font-bold cursor-pointer"
