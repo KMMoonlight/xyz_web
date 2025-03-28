@@ -1,0 +1,6 @@
+$rhap_theme-color: #25b4e1; // 主按钮、进度条、音量滑块
+$rhap_background-color: #fff; // 播放器背景色（可选）
+$rhap_bar-color: #e4e4e4; // 进度条/音量条背景色（可选）
+$rhap_time-color: #666; // 时间文字颜色（可选）
+// 引入库的源样式（关键！不要直接引入编译后的 CSS）
+@import '/node_modules/react-h5-audio-player/src/styles.scss';

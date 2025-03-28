@@ -1,13 +1,14 @@
-import * as React from "react";
-import { useEffect, useState } from "react";
+import * as React from 'react'
+import { useEffect, useState } from 'react'
 import {
   api,
+  emitter,
   getUserID,
   request,
   showPubDateDiffDisplay,
   transferTimeDurationToMinutes,
-} from "@/utils/index";
-import { IEpisode, ISubscriptionInboxUpdateList } from "@/types/type";
+} from '@/utils/index'
+import { IEpisode, ISubscriptionInboxUpdateList } from '@/types/type'
 import {
   CirclePlay,
   Ellipsis,
@@ -17,64 +18,64 @@ import {
   Loader2,
   MessageSquareMore,
   MessageSquareText,
-} from "lucide-react";
-import { Button } from "@/components/ui/button.tsx";
-import { useNavigate } from "react-router-dom";
+} from 'lucide-react'
+import { Button } from '@/components/ui/button.tsx'
+import { useNavigate } from 'react-router-dom'
 
 const SubscriptionPage: React.FC = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false)
   const [loadMoreKey, setLoadMoreKey] = useState<
     { id: string; pubDate: string } | undefined
-  >(undefined);
+  >(undefined)
   const [inboxList, setInboxList] =
-    useState<ISubscriptionInboxUpdateList | null>(null);
-  const [hasMore, setHasMore] = useState<boolean>(true);
+    useState<ISubscriptionInboxUpdateList | null>(null)
+  const [hasMore, setHasMore] = useState<boolean>(true)
 
   const queryInboxList = (isLoad = true) => {
-    setLoading(true);
-    const params = isLoad && loadMoreKey ? { loadMoreKey } : undefined;
+    setLoading(true)
+    const params = isLoad && loadMoreKey ? { loadMoreKey } : undefined
     api
       .apiInboxUpdateList(params)
       .then((res) => {
         setInboxList((val) => {
-          if (!val) return res;
+          if (!val) return res
 
           return {
             ...val,
             data: val?.data.concat(res.data),
-          };
-        });
+          }
+        })
 
         if (res.loadMoreKey) {
-          setLoadMoreKey(res.loadMoreKey);
-          setHasMore(true);
+          setLoadMoreKey(res.loadMoreKey)
+          setHasMore(true)
         } else {
-          setHasMore(false);
+          setHasMore(false)
         }
       })
       .catch((e: any) => {
         if (e.status === 401) {
-          request.reCallOn401(queryInboxList, isLoad);
+          request.reCallOn401(queryInboxList, isLoad)
         }
       })
       .finally(() => {
-        setLoading(false);
-      });
-  };
+        setLoading(false)
+      })
+  }
 
   const loadMore = () => {
-    queryInboxList();
-  };
+    queryInboxList()
+  }
 
   const jumpToPodcastSubscription = () => {
-    navigate(`/overview/subscription/podcasts/${getUserID()}`);
-  };
+    navigate(`/overview/subscription/podcasts/${getUserID()}`)
+  }
 
   useEffect(() => {
-    queryInboxList(false);
-  }, []);
+    queryInboxList(false)
+  }, [])
 
   return (
     <div className="flex flex-col w-full items-center">
@@ -88,7 +89,7 @@ const SubscriptionPage: React.FC = () => {
           <span className="ml-2">我的订阅</span>
         </Button>
       </div>
-      <div className="flex flex-col max-h-[calc(100vh-130px)] overflow-y-auto w-full items-center pl-[20px] pr-[20px]">
+      <div className="flex flex-col max-h-[calc(100vh-210px)] overflow-y-auto w-full items-center pl-[20px] pr-[20px]">
         <InboxList data={inboxList?.data || []} />
         {hasMore ? (
           <Button
@@ -105,18 +106,22 @@ const SubscriptionPage: React.FC = () => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
 const InboxList: React.FC<{ data: IEpisode[] }> = (props: {
-  data: IEpisode[];
+  data: IEpisode[]
 }) => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const jumpToEpisodeDetail = (index: number) => {
-    const targetEpisode = props.data[index];
-    navigate(`/overview/episode/${targetEpisode.eid}`);
-  };
+    const targetEpisode = props.data[index]
+    navigate(`/overview/episode/${targetEpisode.eid}`)
+  }
+
+  const playPodcast = (url: string, title: string) => {
+    emitter.emit('play', { url, title })
+  }
 
   return props.data.map((cell, index) => {
     return (
@@ -176,12 +181,17 @@ const InboxList: React.FC<{ data: IEpisode[] }> = (props: {
                 className="cursor-pointer ml-4"
               />
             </div>
-            <CirclePlay color="#25b4e1" size={26} className="cursor-pointer" />
+            <CirclePlay
+              color="#25b4e1"
+              size={26}
+              className="cursor-pointer"
+              onClick={() => playPodcast(cell.enclosure.url, cell.title)}
+            />
           </div>
         </div>
       </div>
-    );
-  });
-};
+    )
+  })
+}
 
-export default SubscriptionPage;
+export default SubscriptionPage

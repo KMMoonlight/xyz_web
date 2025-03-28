@@ -1,119 +1,119 @@
-import * as React from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { IEpisode, IPodcast } from "@/types/type";
+import * as React from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { IEpisode, IPodcast } from '@/types/type'
 import {
   api,
   request,
   showPubDateDiffDisplay,
   transferTimeDurationToMinutes,
-} from "@/utils/index";
-import CommonSkeleton from "@/components/CommonSkeleton";
-import { Button } from "@/components/ui/button";
-import { IEpisodeParams } from "@/utils/api";
+} from '@/utils/index'
+import CommonSkeleton from '@/components/CommonSkeleton'
+import { Button } from '@/components/ui/button'
+import { IEpisodeParams } from '@/utils/api'
 import {
   ChevronLeft,
   CirclePlay,
   Headphones,
   Loader2,
   MessageSquareText,
-} from "lucide-react";
+} from 'lucide-react'
 
 interface IEpisodeListLoadMoreKey {
-  pubDate: string;
-  id: string;
-  direction: string;
+  pubDate: string
+  id: string
+  direction: string
 }
 
 const PodcastPage: React.FC = () => {
-  const { podcastId } = useParams();
-  const [podcast, setPodcast] = useState<IPodcast | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+  const { podcastId } = useParams()
+  const [podcast, setPodcast] = useState<IPodcast | null>(null)
+  const [loading, setLoading] = useState<boolean>(false)
 
-  const [episodeListLoading, setEpisodeListLoading] = useState<boolean>(false);
-  const [episodeList, setEpisodeList] = useState<IEpisode[]>([]);
+  const [episodeListLoading, setEpisodeListLoading] = useState<boolean>(false)
+  const [episodeList, setEpisodeList] = useState<IEpisode[]>([])
   const [episodeListLoadMoreKey, setEpisodeListLoadMoreKey] =
-    useState<IEpisodeListLoadMoreKey | null>(null);
-  const [totalCount, setTotalCount] = useState<number>(0);
-  const [hasMore, setHasMore] = useState<boolean>(true);
+    useState<IEpisodeListLoadMoreKey | null>(null)
+  const [totalCount, setTotalCount] = useState<number>(0)
+  const [hasMore, setHasMore] = useState<boolean>(true)
 
   const queryPodcastDetail = () => {
     if (podcastId) {
-      setLoading(true);
+      setLoading(true)
       api
         .apiPodcastDetail({ pid: podcastId })
         .then((res) => {
-          setPodcast(res.data);
+          setPodcast(res.data)
         })
         .catch((e) => {
           if (e.status === 401) {
-            request.reCallOn401(queryPodcastDetail);
+            request.reCallOn401(queryPodcastDetail)
           }
         })
         .finally(() => {
-          setLoading(false);
-        });
+          setLoading(false)
+        })
     }
-  };
+  }
 
   const queryEpisodeList = () => {
-    if (!podcastId) return;
+    if (!podcastId) return
 
-    setEpisodeListLoading(true);
+    setEpisodeListLoading(true)
 
     const queryData: IEpisodeParams = {
       pid: podcastId,
-      order: "desc",
-    };
+      order: 'desc',
+    }
 
     if (episodeListLoadMoreKey) {
-      queryData.loadMoreKey = episodeListLoadMoreKey;
+      queryData.loadMoreKey = episodeListLoadMoreKey
     }
 
     api
       .apiEpisodeList(queryData)
       .then((res) => {
         setEpisodeList((val) => {
-          return [...val, ...res.data];
-        });
-        setTotalCount(res.total);
+          return [...val, ...res.data]
+        })
+        setTotalCount(res.total)
 
         if (res.loadMoreKey) {
-          setHasMore(true);
-          setEpisodeListLoadMoreKey(res.loadMoreKey);
+          setHasMore(true)
+          setEpisodeListLoadMoreKey(res.loadMoreKey)
         } else {
-          setHasMore(false);
+          setHasMore(false)
         }
       })
       .catch((e) => {
         if (e.status === 401) {
-          request.reCallOn401(queryEpisodeList);
+          request.reCallOn401(queryEpisodeList)
         }
       })
       .finally(() => {
-        setEpisodeListLoading(false);
-      });
-  };
+        setEpisodeListLoading(false)
+      })
+  }
 
   useEffect(() => {
-    queryPodcastDetail();
-    queryEpisodeList();
-  }, []);
+    queryPodcastDetail()
+    queryEpisodeList()
+  }, [])
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const jumpToEpisodeDetail = (index: number) => {
-    const targetEpisode = episodeList[index];
-    navigate(`/overview/episode/${targetEpisode.eid}`);
-  };
+    const targetEpisode = episodeList[index]
+    navigate(`/overview/episode/${targetEpisode.eid}`)
+  }
 
   const jumpToPodcaster = (uid: string) => {
-    navigate(`/overview/podcaster/${uid}`);
-  };
+    navigate(`/overview/podcaster/${uid}`)
+  }
 
   const backTo = () => {
-    navigate(-1);
-  };
+    navigate(-1)
+  }
 
   return (
     <div className="mt-4 w-full">
@@ -157,7 +157,7 @@ const PodcastPage: React.FC = () => {
                         {cell?.nickname}
                       </div>
                     </div>
-                  );
+                  )
                 })}
               </div>
             </div>
@@ -176,10 +176,10 @@ const PodcastPage: React.FC = () => {
 
             <Button
               variant="outline"
-              style={{ borderColor: "#ebb434", color: "#ebb434" }}
+              style={{ borderColor: '#ebb434', color: '#ebb434' }}
             >
-              <span style={{ color: "#ebb434" }}>
-                {podcast?.subscriptionStatus === "ON" ? "已订阅" : "未订阅"}
+              <span style={{ color: '#ebb434' }}>
+                {podcast?.subscriptionStatus === 'ON' ? '已订阅' : '未订阅'}
               </span>
             </Button>
           </div>
@@ -187,14 +187,14 @@ const PodcastPage: React.FC = () => {
           <div className="h-[1px] w-[580px] bg-neutral-200 mt-6" />
 
           <div className="w-[580px] mt-4">
-            <div className="text-xl font-bold" style={{ color: "#ebb434" }}>
+            <div className="text-xl font-bold" style={{ color: '#ebb434' }}>
               单集更新
             </div>
             <div className="text-sm text-neutral-400 mt-2 mb-2">
               {totalCount}期
             </div>
           </div>
-          <div className="mt-4 overflow-y-auto w-full max-h-[calc(100vh-450px)] flex flex-col items-center">
+          <div className="mt-4 overflow-y-auto w-full max-h-[calc(100vh-530px)] flex flex-col items-center">
             <div className="w-[580px]">
               {episodeList.map((cell, index) => {
                 return (
@@ -246,7 +246,7 @@ const PodcastPage: React.FC = () => {
                       className="cursor-pointer ml-2"
                     />
                   </div>
-                );
+                )
               })}
 
               <div className="w-full flex justify-center">
@@ -271,7 +271,7 @@ const PodcastPage: React.FC = () => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default PodcastPage;
+export default PodcastPage
