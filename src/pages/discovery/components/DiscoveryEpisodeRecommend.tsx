@@ -2,7 +2,7 @@ import { IEpisode, IUser } from "@/types/type.ts";
 import { CirclePlay, RefreshCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useMemo, useState } from "react";
-import { api, request } from "@/utils/index";
+import { api, emitter, request } from "@/utils/index";
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -62,6 +62,18 @@ const DiscoveryEpisodeRecommend: React.FC<{
     navigate(`/overview/podcast/${podcastId}`);
   };
 
+  const playPodcast = ({
+    url,
+    title,
+    image,
+  }: {
+    url: string;
+    title: string;
+    image: string;
+  }) => {
+    emitter.emit("play", { url, title, image });
+  };
+
   return (
     <>
       <div className="ml-4 mt-4 flex w-[30%] justify-between">
@@ -115,6 +127,13 @@ const DiscoveryEpisodeRecommend: React.FC<{
                       color="#25b4e1"
                       size={32}
                       className="cursor-pointer"
+                      onClick={() =>
+                        playPodcast({
+                          url: cell.episode.enclosure.url,
+                          title: cell.episode.title,
+                          image: cell.episode.podcast.image.thumbnailUrl,
+                        })
+                      }
                     />
                   </div>
                 </div>

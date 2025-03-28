@@ -1,4 +1,5 @@
 import { IEpisode } from "@/types/type";
+import { emitter } from "@/utils";
 import { CirclePlay } from "lucide-react";
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
@@ -16,6 +17,18 @@ const RankList: React.FC<{ data: { item: IEpisode }[] }> = (props: {
   const goToPodcast = (index: number) => {
     const podcastId = props.data[index].item.podcast.pid;
     navigate(`/overview/podcast/${podcastId}`);
+  };
+
+  const playPodcast = ({
+    url,
+    title,
+    image,
+  }: {
+    url: string;
+    title: string;
+    image: string;
+  }) => {
+    emitter.emit("play", { url, title, image });
   };
 
   return (
@@ -55,6 +68,13 @@ const RankList: React.FC<{ data: { item: IEpisode }[] }> = (props: {
                 color="#25b4e1"
                 size={32}
                 className="cursor-pointer"
+                onClick={() =>
+                  playPodcast({
+                    url: cell.enclosure.url,
+                    title: cell.title,
+                    image: cell.podcast.image.thumbnailUrl,
+                  })
+                }
               />
             </div>
           </div>

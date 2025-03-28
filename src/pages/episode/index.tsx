@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 import {
   api,
+  emitter,
   highlightTime,
   request,
   showPubDateDiffDisplay,
@@ -92,6 +93,18 @@ const EpisodePage: React.FC = () => {
     navigate(`/overview/podcast/${podcastId}`);
   };
 
+  const playPodcast = ({
+    url,
+    title,
+    image,
+  }: {
+    url: string;
+    title: string;
+    image: string;
+  }) => {
+    emitter.emit("play", { url, title, image });
+  };
+
   return (
     <>
       {loading ? (
@@ -139,6 +152,13 @@ const EpisodePage: React.FC = () => {
                 color={podcastColor}
                 size={32}
                 className="cursor-pointer"
+                onClick={() =>
+                  playPodcast({
+                    url: detailData?.enclosure.url || "",
+                    title: detailData?.title || "",
+                    image: detailData?.podcast.image.thumbnailUrl || "",
+                  })
+                }
               />
             </div>
             <div className="flex justify-between items-center mt-4">

@@ -1,73 +1,73 @@
-import * as React from 'react'
-import { useEffect, useState } from 'react'
-import { api, request } from '@/utils/index'
-import { IPodcast } from '@/types/type'
-import { Button } from '@/components/ui/button.tsx'
-import { ChevronLeft, Loader2 } from 'lucide-react'
-import { useNavigate, useParams } from 'react-router-dom'
+import * as React from "react";
+import { useEffect, useState } from "react";
+import { api, request } from "@/utils/index";
+import { IPodcast } from "@/types/type";
+import { Button } from "@/components/ui/button.tsx";
+import { ChevronLeft, Loader2 } from "lucide-react";
+import { useNavigate, useParams } from "react-router-dom";
 
 const SubscriptionPodcastPage: React.FC = () => {
-  const params = useParams()
-  const [loading, setLoading] = useState<boolean>(false)
-  const [podcastList, setPodcastList] = useState<IPodcast[]>([])
-  const [hasMore, setHasMore] = useState<boolean>(true)
+  const params = useParams();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [podcastList, setPodcastList] = useState<IPodcast[]>([]);
+  const [hasMore, setHasMore] = useState<boolean>(true);
   const [loadMoreKey, setLoadMoreKey] = useState<
     { id: string; subscribedAt: string } | undefined
-  >(undefined)
+  >(undefined);
 
   const querySubscriptionPodcastList = (load: boolean) => {
-    setLoading(true)
+    setLoading(true);
 
     const queryParams: any =
       load && loadMoreKey
-        ? { uid: params.uid || '', loadMoreKey }
-        : { uid: params.uid || '' }
+        ? { uid: params.uid || "", loadMoreKey }
+        : { uid: params.uid || "" };
 
     api
       .apiGetSubscription(queryParams)
       .then((res) => {
         if (res.loadMoreKey) {
-          setLoadMoreKey(res.loadMoreKey)
-          setHasMore(true)
+          setLoadMoreKey(res.loadMoreKey);
+          setHasMore(true);
         } else {
-          setHasMore(false)
+          setHasMore(false);
         }
 
         setPodcastList((val) => {
-          return val.concat(res.data)
-        })
+          return val.concat(res.data);
+        });
       })
       .catch((e) => {
         if (e.status === 401) {
-          request.reCallOn401(querySubscriptionPodcastList, load)
+          request.reCallOn401(querySubscriptionPodcastList, load);
         }
       })
       .finally(() => {
-        setLoading(false)
-      })
-  }
+        setLoading(false);
+      });
+  };
 
   const loadMore = () => {
-    querySubscriptionPodcastList(true)
-  }
+    querySubscriptionPodcastList(true);
+  };
 
   useEffect(() => {
-    querySubscriptionPodcastList(false)
-  }, [])
+    querySubscriptionPodcastList(false);
+  }, []);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const backTo = () => {
-    navigate(-1)
-  }
+    navigate(-1);
+  };
 
   return (
     <>
-      <div className="w-[540px]">
+      <div className="w-[540px] mt-4">
         <ChevronLeft
           size={32}
           color="#25b4e1"
-          className="ml-[-60px] cursor-pointer mt-2"
+          className="ml-[-60px] cursor-pointer "
           onClick={backTo}
         />
       </div>
@@ -93,18 +93,18 @@ const SubscriptionPodcastPage: React.FC = () => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
 const GridPodcastList: React.FC<{ data: IPodcast[] }> = (props: {
-  data: IPodcast[]
+  data: IPodcast[];
 }) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const goToPodcast = (index: number) => {
-    const podcastId = props.data[index].pid
-    navigate(`/overview/podcast/${podcastId}`)
-  }
+    const podcastId = props.data[index].pid;
+    navigate(`/overview/podcast/${podcastId}`);
+  };
 
   return (
     <div className="grid grid-flow grid-cols-3 gap-2 w-[540px] mt-4">
@@ -122,19 +122,19 @@ const GridPodcastList: React.FC<{ data: IPodcast[] }> = (props: {
             />
             {cell.subscriptionOftenPlayed ? (
               <span
-                style={{ backgroundColor: '#DAF1FA', color: '#25b4e1' }}
+                style={{ backgroundColor: "#DAF1FA", color: "#25b4e1" }}
                 className="w-[40px] text-center  rounded absolute text-sm right-2 bottom-2"
               >
                 常听
               </span>
             ) : (
-              ''
+              ""
             )}
           </div>
-        )
+        );
       })}
     </div>
-  )
-}
+  );
+};
 
-export default SubscriptionPodcastPage
+export default SubscriptionPodcastPage;

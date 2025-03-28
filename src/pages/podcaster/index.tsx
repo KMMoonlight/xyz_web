@@ -21,7 +21,7 @@ const PodcasterPage: React.FC = () => {
           onClick={backTo}
         />
       </div>
-      <UserInfoPage uid={params.uid || ""} />
+      <UserInfoPage uid={params.uid || ""} currentUser={false} />
     </>
   );
 };

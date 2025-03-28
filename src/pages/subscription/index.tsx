@@ -1,5 +1,5 @@
-import * as React from 'react'
-import { useEffect, useState } from 'react'
+import * as React from "react";
+import { useEffect, useState } from "react";
 import {
   api,
   emitter,
@@ -7,75 +7,74 @@ import {
   request,
   showPubDateDiffDisplay,
   transferTimeDurationToMinutes,
-} from '@/utils/index'
-import { IEpisode, ISubscriptionInboxUpdateList } from '@/types/type'
+} from "@/utils/index";
+import { IEpisode, ISubscriptionInboxUpdateList } from "@/types/type";
 import {
+  CircleDollarSign,
   CirclePlay,
-  Ellipsis,
   Headphones,
   Layers,
-  ListPlus,
   Loader2,
   MessageSquareMore,
   MessageSquareText,
-} from 'lucide-react'
-import { Button } from '@/components/ui/button.tsx'
-import { useNavigate } from 'react-router-dom'
+} from "lucide-react";
+import { Button } from "@/components/ui/button.tsx";
+import { useNavigate } from "react-router-dom";
 
 const SubscriptionPage: React.FC = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const [loadMoreKey, setLoadMoreKey] = useState<
     { id: string; pubDate: string } | undefined
-  >(undefined)
+  >(undefined);
   const [inboxList, setInboxList] =
-    useState<ISubscriptionInboxUpdateList | null>(null)
-  const [hasMore, setHasMore] = useState<boolean>(true)
+    useState<ISubscriptionInboxUpdateList | null>(null);
+  const [hasMore, setHasMore] = useState<boolean>(true);
 
   const queryInboxList = (isLoad = true) => {
-    setLoading(true)
-    const params = isLoad && loadMoreKey ? { loadMoreKey } : undefined
+    setLoading(true);
+    const params = isLoad && loadMoreKey ? { loadMoreKey } : undefined;
     api
       .apiInboxUpdateList(params)
       .then((res) => {
         setInboxList((val) => {
-          if (!val) return res
+          if (!val) return res;
 
           return {
             ...val,
             data: val?.data.concat(res.data),
-          }
-        })
+          };
+        });
 
         if (res.loadMoreKey) {
-          setLoadMoreKey(res.loadMoreKey)
-          setHasMore(true)
+          setLoadMoreKey(res.loadMoreKey);
+          setHasMore(true);
         } else {
-          setHasMore(false)
+          setHasMore(false);
         }
       })
       .catch((e: any) => {
         if (e.status === 401) {
-          request.reCallOn401(queryInboxList, isLoad)
+          request.reCallOn401(queryInboxList, isLoad);
         }
       })
       .finally(() => {
-        setLoading(false)
-      })
-  }
+        setLoading(false);
+      });
+  };
 
   const loadMore = () => {
-    queryInboxList()
-  }
+    queryInboxList();
+  };
 
   const jumpToPodcastSubscription = () => {
-    navigate(`/overview/subscription/podcasts/${getUserID()}`)
-  }
+    navigate(`/overview/subscription/podcasts/${getUserID()}`);
+  };
 
   useEffect(() => {
-    queryInboxList(false)
-  }, [])
+    queryInboxList(false);
+  }, []);
 
   return (
     <div className="flex flex-col w-full items-center">
@@ -89,7 +88,7 @@ const SubscriptionPage: React.FC = () => {
           <span className="ml-2">我的订阅</span>
         </Button>
       </div>
-      <div className="flex flex-col max-h-[calc(100vh-210px)] overflow-y-auto w-full items-center pl-[20px] pr-[20px]">
+      <div className="flex flex-col max-h-[calc(100vh-250px)] overflow-y-auto w-full items-center pl-[20px] pr-[20px]">
         <InboxList data={inboxList?.data || []} />
         {hasMore ? (
           <Button
@@ -106,22 +105,30 @@ const SubscriptionPage: React.FC = () => {
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
 const InboxList: React.FC<{ data: IEpisode[] }> = (props: {
-  data: IEpisode[]
+  data: IEpisode[];
 }) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const jumpToEpisodeDetail = (index: number) => {
-    const targetEpisode = props.data[index]
-    navigate(`/overview/episode/${targetEpisode.eid}`)
-  }
+    const targetEpisode = props.data[index];
+    navigate(`/overview/episode/${targetEpisode.eid}`);
+  };
 
-  const playPodcast = (url: string, title: string) => {
-    emitter.emit('play', { url, title })
-  }
+  const playPodcast = ({
+    url,
+    title,
+    image,
+  }: {
+    url: string;
+    title: string;
+    image: string;
+  }) => {
+    emitter.emit("play", { url, title, image });
+  };
 
   return props.data.map((cell, index) => {
     return (
@@ -146,6 +153,14 @@ const InboxList: React.FC<{ data: IEpisode[] }> = (props: {
             {cell.description}
           </div>
           <div className="flex w-full text-neutral-400 text-xs mt-2 pr-3">
+            {cell.payType === "PAY_EPISODE" && (
+              <div className="flex items-center mr-2">
+                <CircleDollarSign size={12} color="#ebb434" />
+                <span className="ml-1" style={{ color: "#ebb434" }}>
+                  付费试听
+                </span>
+              </div>
+            )}
             <div className="flex items-center">
               <span>{transferTimeDurationToMinutes(cell.duration)}分钟</span>
             </div>
@@ -165,33 +180,29 @@ const InboxList: React.FC<{ data: IEpisode[] }> = (props: {
             </div>
           </div>
 
-          <div className="flex justify-between items-center mt-2">
-            <div className="flex items-center">
-              <ListPlus size={26} color="#25b4e1" className="cursor-pointer" />
-
-              <MessageSquareMore
-                size={26}
-                color="#25b4e1"
-                className="cursor-pointer ml-4"
-              />
-
-              <Ellipsis
-                size={26}
-                color="#25b4e1"
-                className="cursor-pointer ml-4"
-              />
-            </div>
+          <div className="flex justify-end items-center mt-2">
+            <MessageSquareMore
+              size={26}
+              color="#25b4e1"
+              className="cursor-pointer mr-4"
+            />
             <CirclePlay
               color="#25b4e1"
               size={26}
               className="cursor-pointer"
-              onClick={() => playPodcast(cell.enclosure.url, cell.title)}
+              onClick={() =>
+                playPodcast({
+                  url: cell.enclosure.url,
+                  title: cell.title,
+                  image: cell.podcast.image.picUrl,
+                })
+              }
             />
           </div>
         </div>
       </div>
-    )
-  })
-}
+    );
+  });
+};
 
-export default SubscriptionPage
+export default SubscriptionPage;

@@ -4,3 +4,16 @@ $rhap_bar-color: #e4e4e4; // 进度条/音量条背景色（可选）
 $rhap_time-color: #666; // 时间文字颜色（可选）
 // 引入库的源样式（关键！不要直接引入编译后的 CSS）
 @import '/node_modules/react-h5-audio-player/src/styles.scss';
+
+
+.rhap_container {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+    font-family: inherit;
+    width: 100%;
+    padding: 10px 15px;
+    background-color: #fff;
+    box-shadow: unset;
+}

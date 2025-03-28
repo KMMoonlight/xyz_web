@@ -1,4 +1,5 @@
 import { IUser, IPermission, IEpisode } from "@/types/type.ts";
+import { emitter } from "@/utils";
 import { Headphones, MessageSquareText, CirclePlay } from "lucide-react";
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
@@ -47,6 +48,18 @@ const DiscoveryEditorPick: React.FC<{
     navigate(`/overview/podcast/${podcastId}`);
   };
 
+  const playPodcast = ({
+    url,
+    title,
+    image,
+  }: {
+    url: string;
+    title: string;
+    image: string;
+  }) => {
+    emitter.emit("play", { url, title, image });
+  };
+
   return (
     <>
       <div className="text-2xl ml-4 mt-4 w-[30%]" style={{ color: "#25b4e1" }}>
@@ -88,6 +101,13 @@ const DiscoveryEditorPick: React.FC<{
                       color="#25b4e1"
                       size={32}
                       className="cursor-pointer"
+                      onClick={() =>
+                        playPodcast({
+                          url: cell.episode.enclosure.url,
+                          title: cell.episode.title,
+                          image: cell.episode.podcast.image.thumbnailUrl,
+                        })
+                      }
                     />
                   </div>
                 </div>
