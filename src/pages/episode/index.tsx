@@ -15,7 +15,6 @@ import {
   ChevronLeft,
   CircleDollarSign,
   CirclePlay,
-  ListPlus,
   MessageSquareMore,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -125,20 +124,7 @@ const EpisodePage: React.FC = () => {
             />
             <div className="mt-2 flex justify-between items-center">
               <div className="w-[400px] flex flex-col">
-                <div>
-                  <span>
-                    {detailData?.payType === "PAY_EPISODE" ? (
-                      <CircleDollarSign
-                        size={22}
-                        color={podcastColor}
-                        className="inline align-text-bottom mr-2"
-                      />
-                    ) : (
-                      ""
-                    )}
-                  </span>
-                  <span className="text-xl font-bold">{detailData?.title}</span>
-                </div>
+                <span className="text-xl font-bold">{detailData?.title}</span>
                 <span
                   className="text-sm mt-4 cursor-pointer"
                   style={{ color: podcastColor }}
@@ -163,6 +149,14 @@ const EpisodePage: React.FC = () => {
             </div>
             <div className="flex justify-between items-center mt-4">
               <div className="flex items-center text-sm text-neutral-400">
+                {detailData?.payType === "PAY_EPISODE" && (
+                  <div className="flex items-center mr-2">
+                    <CircleDollarSign size={12} color="#ebb434" />
+                    <span className="ml-1" style={{ color: "#ebb434" }}>
+                      付费
+                    </span>
+                  </div>
+                )}
                 <span>
                   {transferTimeDurationToMinutes(detailData?.duration || 0)}分钟
                 </span>
@@ -170,18 +164,6 @@ const EpisodePage: React.FC = () => {
                 <span>{showPubDateDiffDisplay(detailData?.pubDate || "")}</span>
               </div>
               <div className="flex items-center">
-                <ListPlus
-                  size={26}
-                  color={
-                    permissionMap["PAY"] ? podcastColor : podcastColor + "88"
-                  }
-                  className={
-                    permissionMap["PAY"]
-                      ? "cursor-pointer"
-                      : "cursor-not-allowed"
-                  }
-                />
-
                 <MessageSquareMore
                   size={26}
                   color={
@@ -201,7 +183,7 @@ const EpisodePage: React.FC = () => {
           </div>
           <div className="w-full h-[calc(100vh-340px)] overflow-y-auto flex flex-col items-center">
             <div
-              className="w-[500px] text-sm show-notes mb-4"
+              className="w-[500px] text-sm show-notes mt-2 mb-4"
               dangerouslySetInnerHTML={{
                 __html: detailData?.shownotes
                   ? highlightTime(detailData?.shownotes || "")

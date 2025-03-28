@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { IEpisodeParams } from "@/utils/api";
 import {
   ChevronLeft,
+  CircleDollarSign,
   CirclePlay,
   Headphones,
   Loader2,
@@ -232,6 +233,14 @@ const PodcastPage: React.FC = () => {
                         {cell.description}
                       </div>
                       <div className="flex w-full text-neutral-400 text-xs mt-2 pr-3">
+                        {cell.payType === "PAY_EPISODE" && (
+                          <div className="flex items-center mr-2">
+                            <CircleDollarSign size={12} color="#ebb434" />
+                            <span className="ml-1" style={{ color: "#ebb434" }}>
+                              付费试听
+                            </span>
+                          </div>
+                        )}
                         <div className="flex items-center">
                           <span>
                             {transferTimeDurationToMinutes(cell.duration)}分钟
