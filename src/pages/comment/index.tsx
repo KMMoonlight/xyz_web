@@ -8,7 +8,6 @@ import {
   showPubDateDiffDisplay,
 } from "@/utils/index";
 import { IComment } from "@/types/type";
-import CommonSkeleton from "@/components/CommonSkeleton";
 import { ChevronLeft, Loader2, ThumbsUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
