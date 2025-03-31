@@ -15,7 +15,9 @@ import {
   ChevronLeft,
   CircleDollarSign,
   CirclePlay,
+  Headphones,
   MessageSquareMore,
+  MessageSquareText,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -104,6 +106,10 @@ const EpisodePage: React.FC = () => {
     emitter.emit("play", { url, title, image });
   };
 
+  const jumpToComment = (eid: string) => {
+    navigate(`/overview/comment/${eid}`);
+  };
+
   return (
     <>
       {loading ? (
@@ -162,6 +168,12 @@ const EpisodePage: React.FC = () => {
                 </span>
                 <span>&nbsp;·&nbsp;</span>
                 <span>{showPubDateDiffDisplay(detailData?.pubDate || "")}</span>
+                <span>&nbsp;·&nbsp;</span>
+                <Headphones size={12} />
+                <span className="ml-1">{detailData?.playCount}</span>
+                <span>&nbsp;·&nbsp;</span>
+                <MessageSquareText size={12} />
+                <span className="ml-1">{detailData?.commentCount}</span>
               </div>
               <div className="flex items-center">
                 <MessageSquareMore
@@ -176,6 +188,7 @@ const EpisodePage: React.FC = () => {
                       ? "cursor-pointer ml-6"
                       : "cursor-not-allowed ml-6"
                   }
+                  onClick={() => jumpToComment(detailData?.eid || "")}
                 />
               </div>
             </div>

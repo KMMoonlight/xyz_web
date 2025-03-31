@@ -9,6 +9,7 @@ import SubscriptionPodcastPage from "@/pages/subscription_podcast";
 import EpisodePage from "@/pages/episode/index";
 import PodcastPage from "@/pages/podcast/index";
 import PodcasterPage from "@/pages/podcaster/index";
+import CommentPage from "@/pages/comment";
 
 const routes: RouteObject[] = [
   {
@@ -46,6 +47,10 @@ const routes: RouteObject[] = [
       {
         path: "/overview/podcaster/:uid",
         element: <PodcasterPage />,
+      },
+      {
+        path: "/overview/comment/:eid",
+        element: <CommentPage />,
       },
     ],
   },

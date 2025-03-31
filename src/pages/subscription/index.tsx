@@ -118,6 +118,10 @@ const InboxList: React.FC<{ data: IEpisode[] }> = (props: {
     navigate(`/overview/episode/${targetEpisode.eid}`);
   };
 
+  const jumpToComment = (eid: string) => {
+    navigate(`/overview/comment/${eid}`);
+  };
+
   const playPodcast = ({
     url,
     title,
@@ -185,6 +189,9 @@ const InboxList: React.FC<{ data: IEpisode[] }> = (props: {
               size={26}
               color="#25b4e1"
               className="cursor-pointer mr-4"
+              onClick={() => {
+                jumpToComment(cell.eid);
+              }}
             />
             <CirclePlay
               color="#25b4e1"

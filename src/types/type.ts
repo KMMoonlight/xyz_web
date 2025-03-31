@@ -160,3 +160,17 @@ export interface IUserState {
   subscriptionCount: number;
   totalPlayedSeconds: number;
 }
+
+export interface IComment {
+  id: string;
+  author: IUser;
+  ipLoc: string;
+  likeCount: number;
+  liked: boolean;
+  pinned: boolean;
+  text: string;
+  replyCount: number;
+  createdAt: string;
+  replies?: IComment[];
+  replyToComment?: IComment;
+}
