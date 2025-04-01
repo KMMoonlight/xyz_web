@@ -1,50 +1,50 @@
-import * as React from "react";
-import AudioPlayer from "react-h5-audio-player";
-import { useEffect, useRef, useState } from "react";
-import { emitter } from "@/utils";
-import "./player.scss";
+import * as React from 'react'
+import AudioPlayer from 'react-h5-audio-player'
+import { useEffect, useRef, useState } from 'react'
+import { emitter } from '@/utils'
+import './player.scss'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import cosmos from "@/assets/cosmos.svg";
+} from '@/components/ui/select'
+import cosmos from '@/assets/cosmos.svg'
 
 const PlayerPage: React.FC = () => {
-  const audioPlayerRef: any = useRef(null);
-  const [audioSrc, setAudioSrc] = useState<string | undefined>(undefined);
-  const [audioTitle, setAudioTitle] = useState<string>("");
-  const [playbackRate, setPlaybackRate] = useState<string>("1");
-  const [image, setImage] = useState<string>("");
+  const audioPlayerRef: any = useRef(null)
+  const [audioSrc, setAudioSrc] = useState<string | undefined>(undefined)
+  const [audioTitle, setAudioTitle] = useState<string>('')
+  const [playbackRate, setPlaybackRate] = useState<string>('1')
+  const [image, setImage] = useState<string>('')
 
   const handleSpeedChange = (speed: string) => {
     if (audioPlayerRef.current?.audio?.current) {
-      audioPlayerRef.current.audio.current.playbackRate = Number(speed);
-      setPlaybackRate(speed);
+      audioPlayerRef.current.audio.current.playbackRate = Number(speed)
+      setPlaybackRate(speed)
     }
-  };
+  }
 
   const handlePlay = React.useCallback(
     ({ url, title, image }: { url: string; title: string; image: string }) => {
       if (url) {
-        setAudioSrc(url);
-        setAudioTitle(title);
-        setImage(image);
+        setAudioSrc(url)
+        setAudioTitle(title)
+        setImage(image)
       }
     },
     []
-  );
+  )
 
   useEffect(() => {
-    emitter.on("play", handlePlay as any);
-    return () => emitter.off("play", handlePlay as any);
-  }, []);
+    emitter.on('play', handlePlay as any)
+    return () => emitter.off('play', handlePlay as any)
+  }, [])
 
   return (
-    <div className="w-[691px] bg-white border border-neutral-200 shadow-md rounded-md flex items-center mt-3">
-      <div className="h-[80px] w-[80px] flex items-center justify-center rounded-md ml-2">
+    <div className="w-[580px] bg-white border border-neutral-200 shadow-md rounded-md flex items-center mt-3">
+      <div className="h-[60px] w-[60px] flex items-center justify-center rounded-md ml-2">
         {image && (
           <img src={image} alt="podcast" className="w-full h-full rounded-md" />
         )}
@@ -57,8 +57,8 @@ const PlayerPage: React.FC = () => {
         )}
       </div>
       <div className="flex-1 relative flex flex-col items-center rounded">
-        <div className="text-neutral-400 h-[26px] flex justify-center pt-[4px]">
-          {audioTitle || "欢迎来探索小宇宙~"}
+        <div className="text-sm text-neutral-400 h-[26px] flex justify-center pt-[4px]">
+          {audioTitle || '欢迎来探索小宇宙~'}
         </div>
         <div className="rounded-md w-full">
           <AudioPlayer
@@ -66,7 +66,10 @@ const PlayerPage: React.FC = () => {
             src={audioSrc}
             showJumpControls={false}
             customAdditionalControls={[
-              <div key="speed-control" className="absolute left-4 bottom-2">
+              <div
+                key="speed-control"
+                className="absolute left-4 bottom-2 play-speed"
+              >
                 <Select
                   onValueChange={handleSpeedChange}
                   defaultValue={playbackRate}
@@ -87,7 +90,7 @@ const PlayerPage: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default PlayerPage;
+export default PlayerPage

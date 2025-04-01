@@ -5,15 +5,42 @@ $rhap_time-color: #666; // 时间文字颜色（可选）
 // 引入库的源样式（关键！不要直接引入编译后的 CSS）
 @import '/node_modules/react-h5-audio-player/src/styles.scss';
 
-
 .rhap_container {
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    line-height: 1;
-    font-family: inherit;
-    width: 100%;
-    padding: 10px 15px;
-    background-color: #fff;
-    box-shadow: unset;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+  font-family: inherit;
+  width: 100%;
+  padding: 0px 15px;
+  background-color: #fff;
+  box-shadow: unset;
+}
+
+.rhap_play-pause-button {
+  font-size: 24px;
+}
+
+.rhap_volume-button {
+  font-size: 24px;
+}
+
+.rhap_controls-section {
+  margin-top: 0px !important;
+}
+
+.rhap_progress-indicator {
+  width: 16px;
+  height: 16px;
+  top: -6px;
+}
+
+.play-speed {
+  button {
+    width: 80px;
+    padding-top: 0;
+    padding-bottom: 0;
+    height: 24px;
+    border-radius: 6px;
+  }
 }
