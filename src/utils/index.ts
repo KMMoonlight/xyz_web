@@ -33,7 +33,10 @@ function showPubDateDiffDisplay(date: string) {
   }
   const month = pubDate.getMonth() + 1;
   const displayDay = pubDate.getDate();
-  return `${month < 10 ? "0" + month : month}/${displayDay < 10 ? "0" + displayDay : displayDay}`;
+  const displayDate = `${month < 10 ? "0" + month : month}/${displayDay < 10 ? "0" + displayDay : displayDay}`;
+  return pubDate.getFullYear() === nowDate.getFullYear()
+    ? displayDate
+    : `${pubDate.getFullYear()}/${displayDate}`;
 }
 
 //评论99+
