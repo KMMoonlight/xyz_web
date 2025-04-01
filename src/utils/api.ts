@@ -74,7 +74,7 @@ export function apiUpdateStarSubscription(data: IUpdateStarSubscriptionParams) {
 
 //搜索
 interface ISearchParams {
-  pid: string;
+  pid?: string;
   type: string;
   keyword: string;
   loadMoreKey?: {

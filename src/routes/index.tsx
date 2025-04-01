@@ -10,6 +10,7 @@ import EpisodePage from "@/pages/episode/index";
 import PodcastPage from "@/pages/podcast/index";
 import PodcasterPage from "@/pages/podcaster/index";
 import CommentPage from "@/pages/comment";
+import SearchResultPage from "@/pages/search_result";
 
 const routes: RouteObject[] = [
   {
@@ -51,6 +52,10 @@ const routes: RouteObject[] = [
       {
         path: "/overview/comment/:eid",
         element: <CommentPage />,
+      },
+      {
+        path: "/overview/search_result/:keyword",
+        element: <SearchResultPage />,
       },
     ],
   },
