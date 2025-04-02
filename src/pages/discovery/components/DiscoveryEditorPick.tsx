@@ -52,12 +52,16 @@ const DiscoveryEditorPick: React.FC<{
     url,
     title,
     image,
+    eid,
+    pid,
   }: {
     url: string;
     title: string;
     image: string;
+    eid: string;
+    pid: string;
   }) => {
-    emitter.emit("play", { url, title, image });
+    emitter.emit("play", { url, title, image, eid, pid });
   };
 
   return (
@@ -106,6 +110,8 @@ const DiscoveryEditorPick: React.FC<{
                           url: cell.episode.enclosure.url,
                           title: cell.episode.title,
                           image: cell.episode.podcast.image.thumbnailUrl,
+                          eid: cell.episode.eid,
+                          pid: cell.episode.podcast.pid,
                         })
                       }
                     />

@@ -23,12 +23,16 @@ const RankList: React.FC<{ data: { item: IEpisode }[] }> = (props: {
     url,
     title,
     image,
+    eid,
+    pid,
   }: {
     url: string;
     title: string;
     image: string;
+    eid: string;
+    pid: string;
   }) => {
-    emitter.emit("play", { url, title, image });
+    emitter.emit("play", { url, title, image, eid, pid });
   };
 
   return (
@@ -73,6 +77,8 @@ const RankList: React.FC<{ data: { item: IEpisode }[] }> = (props: {
                     url: cell.enclosure.url,
                     title: cell.title,
                     image: cell.podcast.image.thumbnailUrl,
+                    eid: cell.eid,
+                    pid: cell.podcast.pid,
                   })
                 }
               />

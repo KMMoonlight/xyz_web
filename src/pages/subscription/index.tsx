@@ -126,12 +126,16 @@ const InboxList: React.FC<{ data: IEpisode[] }> = (props: {
     url,
     title,
     image,
+    eid,
+    pid,
   }: {
     url: string;
     title: string;
     image: string;
+    eid: string;
+    pid: string;
   }) => {
-    emitter.emit("play", { url, title, image });
+    emitter.emit("play", { url, title, image, eid, pid });
   };
 
   return props.data.map((cell, index) => {
@@ -202,6 +206,8 @@ const InboxList: React.FC<{ data: IEpisode[] }> = (props: {
                   url: cell.enclosure.url,
                   title: cell.title,
                   image: cell.podcast.image.picUrl,
+                  eid: cell.eid,
+                  pid: cell.podcast.pid,
                 })
               }
             />

@@ -98,12 +98,16 @@ const EpisodePage: React.FC = () => {
     url,
     title,
     image,
+    eid,
+    pid,
   }: {
     url: string;
     title: string;
     image: string;
+    eid: string;
+    pid: string;
   }) => {
-    emitter.emit("play", { url, title, image });
+    emitter.emit("play", { url, title, image, eid, pid });
   };
 
   const jumpToComment = (eid: string) => {
@@ -149,6 +153,8 @@ const EpisodePage: React.FC = () => {
                     url: detailData?.enclosure.url || "",
                     title: detailData?.title || "",
                     image: detailData?.podcast.image.thumbnailUrl || "",
+                    eid: detailData?.eid || "",
+                    pid: detailData?.podcast.pid || "",
                   })
                 }
               />
