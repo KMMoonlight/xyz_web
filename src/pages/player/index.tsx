@@ -66,7 +66,7 @@ const PlayerPage: React.FC = () => {
         },
       ],
     };
-    api.apiUpdatePlaybackProgress(data);
+    //api.apiUpdatePlaybackProgress(data);
   };
 
   useEffect(() => {
