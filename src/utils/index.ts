@@ -68,6 +68,9 @@ function timeToHours(seconds: number) {
 }
 
 function highlightTime(str: string) {
+  str = str.replaceAll('font-family:', 'font-family:LXGW WenKai TC,')
+
+  
   return str.replace(
     /\b(\d{1,2}):([0-5][0-9])(?::([0-5][0-9]))?\b/g,
     '<span class="highlight-time">$&</span>'
