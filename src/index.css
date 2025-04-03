@@ -125,6 +125,9 @@ body {
 }
 
 .show-notes {
+  font-family: 'LXGW WenKai TC', sans-serif !important;
+  font-weight: normal !important;
+  
   p {
     margin-top: 20px;
   }
