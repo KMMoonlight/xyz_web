@@ -1,104 +1,103 @@
-import * as React from "react";
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { api, request, showPubDateDiffDisplay } from "@/utils/index";
-import { IEpisode, IPodcast, IUser } from "@/types/type";
-import { Button } from "@/components/ui/button";
+import * as React from 'react'
+import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { api, request, showPubDateDiffDisplay } from '@/utils/index'
+import { IEpisode, IPodcast, IUser } from '@/types/type'
+import { Button } from '@/components/ui/button'
 import {
   ChevronLeft,
   Headphones,
   Loader2,
   MessageSquareText,
-} from "lucide-react";
-import { Input } from "@/components/ui/input";
+} from 'lucide-react'
+import { Input } from '@/components/ui/input'
+import { toast } from 'sonner'
 
 enum SEARCH_TYPE {
-  PODCAST = "PODCAST",
-  EPISODE = "EPISODE",
-  USER = "USER",
+  PODCAST = 'PODCAST',
+  EPISODE = 'EPISODE',
+  USER = 'USER',
 }
 
 const SearchResultPage: React.FC = () => {
-  const params = useParams();
+  const params = useParams()
 
-  const [keyword, setKeyword] = useState<string>(params.keyword as string);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [podcastHasMore, setPodcastHasMore] = useState<boolean>(false);
-  const [episodeHasMore, setEpisodeHasMore] = useState<boolean>(false);
-  const [userHasMore, setUserHasMore] = useState<boolean>(false);
+  const [keyword, setKeyword] = useState<string>(params.keyword as string)
+  const [loading, setLoading] = useState<boolean>(false)
+  const [podcastHasMore, setPodcastHasMore] = useState<boolean>(false)
+  const [episodeHasMore, setEpisodeHasMore] = useState<boolean>(false)
+  const [userHasMore, setUserHasMore] = useState<boolean>(false)
   const [podcastLoadMoreKey, setPodcastLoadMoreKey] = useState<{
-    loadMoreKey: number;
-    searchId: string;
-  } | null>(null);
+    loadMoreKey: number
+    searchId: string
+  } | null>(null)
   const [episodeLoadMoreKey, setEpisodeLoadMoreKey] = useState<{
-    loadMoreKey: number;
-    searchId: string;
-  } | null>(null);
+    loadMoreKey: number
+    searchId: string
+  } | null>(null)
   const [userLoadMoreKey, setUserLoadMoreKey] = useState<{
-    loadMoreKey: number;
-    searchId: string;
-  } | null>(null);
+    loadMoreKey: number
+    searchId: string
+  } | null>(null)
 
-  const [podcastList, setPodcastList] = useState<IPodcast[]>([]);
-  const [episodeList, setEpisodeList] = useState<IEpisode[]>([]);
-  const [userList, setUserList] = useState<IUser[]>([]);
+  const [podcastList, setPodcastList] = useState<IPodcast[]>([])
+  const [episodeList, setEpisodeList] = useState<IEpisode[]>([])
+  const [userList, setUserList] = useState<IUser[]>([])
 
-  const [currentTab, setCurrentTab] = useState<SEARCH_TYPE>(
-    SEARCH_TYPE.PODCAST
-  );
+  const [currentTab, setCurrentTab] = useState<SEARCH_TYPE>(SEARCH_TYPE.PODCAST)
 
   const setLoadMoreKey = (
     type: SEARCH_TYPE,
     loadMoreKey: {
-      loadMoreKey: number;
-      searchId: string;
+      loadMoreKey: number
+      searchId: string
     } | null
   ) => {
     if (type === SEARCH_TYPE.PODCAST) {
       if (loadMoreKey) {
-        setPodcastLoadMoreKey(loadMoreKey);
-        setPodcastHasMore(true);
+        setPodcastLoadMoreKey(loadMoreKey)
+        setPodcastHasMore(true)
       } else {
-        setPodcastHasMore(false);
+        setPodcastHasMore(false)
       }
     } else if (type === SEARCH_TYPE.EPISODE) {
       if (loadMoreKey) {
-        setEpisodeLoadMoreKey(loadMoreKey);
-        setEpisodeHasMore(true);
+        setEpisodeLoadMoreKey(loadMoreKey)
+        setEpisodeHasMore(true)
       } else {
-        setEpisodeHasMore(false);
+        setEpisodeHasMore(false)
       }
     } else if (type === SEARCH_TYPE.USER) {
       if (loadMoreKey) {
-        setUserLoadMoreKey(loadMoreKey);
-        setUserHasMore(true);
+        setUserLoadMoreKey(loadMoreKey)
+        setUserHasMore(true)
       } else {
-        setUserHasMore(false);
+        setUserHasMore(false)
       }
     }
-  };
+  }
 
   const getLoadMoreKey = (type: SEARCH_TYPE) => {
     if (type === SEARCH_TYPE.PODCAST) {
-      return podcastHasMore ? podcastLoadMoreKey : null;
+      return podcastHasMore ? podcastLoadMoreKey : null
     } else if (type === SEARCH_TYPE.EPISODE) {
-      return episodeHasMore ? episodeLoadMoreKey : null;
+      return episodeHasMore ? episodeLoadMoreKey : null
     } else if (type === SEARCH_TYPE.USER) {
-      return userHasMore ? userLoadMoreKey : null;
+      return userHasMore ? userLoadMoreKey : null
     }
-  };
+  }
 
   //全部：ALL、节目：PODCAST、单集：EPISODE、用户：USER
   const querySearch = (searchType: SEARCH_TYPE) => {
-    setLoading(true);
+    setLoading(true)
 
     const data: any = {
       type: searchType,
       keyword: keyword,
-    };
+    }
 
     if (getLoadMoreKey(searchType)) {
-      data.loadMoreKey = getLoadMoreKey(searchType);
+      data.loadMoreKey = getLoadMoreKey(searchType)
     }
 
     api
@@ -106,67 +105,78 @@ const SearchResultPage: React.FC = () => {
       .then((res) => {
         if (searchType === SEARCH_TYPE.PODCAST) {
           setPodcastList((v) => {
-            return [...v, ...res.data];
-          });
+            return [...v, ...res.data]
+          })
         } else if (searchType === SEARCH_TYPE.EPISODE) {
           setEpisodeList((v) => {
-            return [...v, ...res.data];
-          });
+            return [...v, ...res.data]
+          })
         } else if (searchType === SEARCH_TYPE.USER) {
           setUserList((v) => {
-            return [...v, ...res.data];
-          });
+            return [...v, ...res.data]
+          })
         }
-        setLoadMoreKey(searchType, res.loadMoreKey);
+        setLoadMoreKey(searchType, res.loadMoreKey)
       })
       .catch((e) => {
         if (e.status === 401) {
-          request.reCallOn401(querySearch);
+          request.reCallOn401(querySearch)
         }
       })
       .finally(() => {
-        setLoading(false);
-      });
-  };
+        setLoading(false)
+      })
+  }
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const backTo = () => {
-    navigate(-1);
-  };
+    navigate(-1)
+  }
 
   const [inputKeyWord, setInputKeyWord] = useState<string>(
     params.keyword as string
-  );
+  )
 
   const onSearchInput = (e: any) => {
-    setInputKeyWord(e.target.value);
-  };
+    setInputKeyWord(e.target.value)
+  }
 
   const onSearchKeyDown = (e: any) => {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       //清空之前的结果
-      setPodcastList([]);
-      setEpisodeList([]);
-      setUserList([]);
-      setPodcastHasMore(false);
-      setEpisodeHasMore(false);
-      setUserHasMore(false);
-      setPodcastLoadMoreKey(null);
-      setEpisodeLoadMoreKey(null);
-      setUserLoadMoreKey(null);
-      setKeyword(inputKeyWord);
-      navigate(`/overview/search_result/${inputKeyWord}`, { replace: true });
+      setPodcastList([])
+      setEpisodeList([])
+      setUserList([])
+      setPodcastHasMore(false)
+      setEpisodeHasMore(false)
+      setUserHasMore(false)
+      setPodcastLoadMoreKey(null)
+      setEpisodeLoadMoreKey(null)
+      setUserLoadMoreKey(null)
+      setKeyword(inputKeyWord)
+      navigate(`/overview/search_result/${inputKeyWord}`, { replace: true })
     }
-  };
+  }
+
+  const changeSubscriptionStatus = (pid: string, status: string) => {
+    setPodcastList((v) => {
+      return v.map((cell) => {
+        if (cell.pid === pid) {
+          return { ...cell, subscriptionStatus: status }
+        }
+        return cell
+      })
+    })
+  }
 
   useEffect(() => {
     if (keyword) {
-      querySearch(SEARCH_TYPE.PODCAST);
-      querySearch(SEARCH_TYPE.EPISODE);
-      querySearch(SEARCH_TYPE.USER);
+      querySearch(SEARCH_TYPE.PODCAST)
+      querySearch(SEARCH_TYPE.EPISODE)
+      querySearch(SEARCH_TYPE.USER)
     }
-  }, [keyword]);
+  }, [keyword])
 
   return (
     <div className="w-full flex flex-col items-center">
@@ -190,7 +200,7 @@ const SearchResultPage: React.FC = () => {
         <div
           className="text-xl font-bold text-center flex-1 cursor-pointer"
           style={{
-            color: `${currentTab === SEARCH_TYPE.PODCAST ? "#25b4e1" : ""}`,
+            color: `${currentTab === SEARCH_TYPE.PODCAST ? '#25b4e1' : ''}`,
           }}
           onClick={() => setCurrentTab(SEARCH_TYPE.PODCAST)}
         >
@@ -199,7 +209,7 @@ const SearchResultPage: React.FC = () => {
         <div
           className="text-xl font-bold text-center  flex-1 cursor-pointer"
           style={{
-            color: `${currentTab === SEARCH_TYPE.EPISODE ? "#25b4e1" : ""}`,
+            color: `${currentTab === SEARCH_TYPE.EPISODE ? '#25b4e1' : ''}`,
           }}
           onClick={() => setCurrentTab(SEARCH_TYPE.EPISODE)}
         >
@@ -208,7 +218,7 @@ const SearchResultPage: React.FC = () => {
         <div
           className="text-xl font-bold text-center  flex-1 cursor-pointer"
           style={{
-            color: `${currentTab === SEARCH_TYPE.USER ? "#25b4e1" : ""}`,
+            color: `${currentTab === SEARCH_TYPE.USER ? '#25b4e1' : ''}`,
           }}
           onClick={() => setCurrentTab(SEARCH_TYPE.USER)}
         >
@@ -219,19 +229,19 @@ const SearchResultPage: React.FC = () => {
         <div
           className="h-[4px] w-[190px] rounded mx-2"
           style={{
-            backgroundColor: `${currentTab === SEARCH_TYPE.PODCAST ? "#25b4e1" : "#e8eced"}`,
+            backgroundColor: `${currentTab === SEARCH_TYPE.PODCAST ? '#25b4e1' : '#e8eced'}`,
           }}
         />
         <div
           className="h-[4px] w-[190px] rounded mx-2"
           style={{
-            backgroundColor: `${currentTab === SEARCH_TYPE.EPISODE ? "#25b4e1" : "#e8eced"}`,
+            backgroundColor: `${currentTab === SEARCH_TYPE.EPISODE ? '#25b4e1' : '#e8eced'}`,
           }}
         />
         <div
           className="h-[4px] w-[190px] rounded mx-2"
           style={{
-            backgroundColor: `${currentTab === SEARCH_TYPE.USER ? "#25b4e1" : "#e8eced"}`,
+            backgroundColor: `${currentTab === SEARCH_TYPE.USER ? '#25b4e1' : '#e8eced'}`,
           }}
         />
       </div>
@@ -242,6 +252,9 @@ const SearchResultPage: React.FC = () => {
           podcastHasMore={podcastHasMore}
           loading={loading}
           queryPodcastList={() => querySearch(SEARCH_TYPE.PODCAST)}
+          changeSubscriptionStatusHandle={(pid, status) =>
+            changeSubscriptionStatus(pid, status)
+          }
         />
       )}
 
@@ -263,21 +276,47 @@ const SearchResultPage: React.FC = () => {
         />
       )}
     </div>
-  );
-};
+  )
+}
 
 const PodcastList = React.memo(
   (props: {
-    podcastList: IPodcast[];
-    podcastHasMore: boolean;
-    loading: boolean;
-    queryPodcastList: () => void;
+    podcastList: IPodcast[]
+    podcastHasMore: boolean
+    loading: boolean
+    queryPodcastList: () => void
+    changeSubscriptionStatusHandle: (pid: string, status: string) => void
   }) => {
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
     const jumpToPodcastDetail = (pid: string) => {
-      navigate(`/overview/podcast/${pid}`);
-    };
+      navigate(`/overview/podcast/${pid}`)
+    }
+
+    const changeSubscriptionStatus = (pid: string, status: string) => {
+      //如果pid或者订阅状态不存在的话，直接return
+      if (!pid || !status) return
+
+      const data = {
+        pid,
+        mode: status === 'ON' ? 'OFF' : 'ON',
+      }
+
+      api
+        .apiUpdateSubscription(data)
+        .then(() => {
+          toast('操作成功!')
+          props.changeSubscriptionStatusHandle(
+            pid,
+            status === 'ON' ? 'OFF' : 'ON'
+          )
+        })
+        .catch((e) => {
+          if (e.status === 401) {
+            request.reCallOn401(changeSubscriptionStatus)
+          }
+        })
+    }
 
     return (
       <div className="w-full flex flex-col items-center h-[calc(100vh-280px)] overflow-y-auto">
@@ -311,7 +350,7 @@ const PodcastList = React.memo(
                         src={cell.avatar.picture.thumbnailUrl}
                         className="w-[16px] h-[16px] rounded-full mr-1"
                       />
-                    );
+                    )
                   })}
 
                   <div className="text-xs text-neutral-400">
@@ -319,11 +358,20 @@ const PodcastList = React.memo(
                   </div>
                 </div>
               </div>
-              <Button variant="outline" style={{ color: "#ebb434" }}>
-                {podcast?.subscriptionStatus === "ON" ? "已订阅" : "未订阅"}
+              <Button
+                variant="outline"
+                style={{ color: '#ebb434' }}
+                onClick={() =>
+                  changeSubscriptionStatus(
+                    podcast.pid,
+                    podcast?.subscriptionStatus || ''
+                  )
+                }
+              >
+                {podcast?.subscriptionStatus === 'ON' ? '已订阅' : '未订阅'}
               </Button>
             </div>
-          );
+          )
         })}
 
         <div className="w-full flex justify-center">
@@ -344,26 +392,26 @@ const PodcastList = React.memo(
           )}
         </div>
       </div>
-    );
+    )
   }
-);
+)
 
 const EpisodeList = React.memo(
   (props: {
-    episodeList: IEpisode[];
-    episodeHasMore: boolean;
-    loading: boolean;
-    queryEpisodeList: () => void;
+    episodeList: IEpisode[]
+    episodeHasMore: boolean
+    loading: boolean
+    queryEpisodeList: () => void
   }) => {
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
     const jumpToEpisodeDetail = (eid: string) => {
-      navigate(`/overview/episode/${eid}`);
-    };
+      navigate(`/overview/episode/${eid}`)
+    }
 
     const goToPodcast = (pid: string) => {
-      navigate(`/overview/podcast/${pid}`);
-    };
+      navigate(`/overview/podcast/${pid}`)
+    }
 
     return (
       <div className="w-full flex flex-col items-center h-[calc(100vh-280px)] overflow-y-auto">
@@ -405,7 +453,7 @@ const EpisodeList = React.memo(
                 </div>
               </div>
             </div>
-          );
+          )
         })}
 
         <div className="w-full flex justify-center">
@@ -426,22 +474,22 @@ const EpisodeList = React.memo(
           )}
         </div>
       </div>
-    );
+    )
   }
-);
+)
 
 const UserList = React.memo(
   (props: {
-    userList: IUser[];
-    userHasMore: boolean;
-    loading: boolean;
-    queryUserList: () => void;
+    userList: IUser[]
+    userHasMore: boolean
+    loading: boolean
+    queryUserList: () => void
   }) => {
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
     const jumpToUserDetail = (uid: string) => {
-      navigate(`/overview/podcaster/${uid}`);
-    };
+      navigate(`/overview/podcaster/${uid}`)
+    }
 
     return (
       <div className="w-full flex flex-col items-center h-[calc(100vh-280px)] overflow-y-auto">
@@ -459,7 +507,7 @@ const UserList = React.memo(
               />
               <div className="flex flex-col flex-1 mx-4">{user.nickname}</div>
             </div>
-          );
+          )
         })}
 
         <div className="w-full flex justify-center">
@@ -480,8 +528,8 @@ const UserList = React.memo(
           )}
         </div>
       </div>
-    );
+    )
   }
-);
+)
 
-export default SearchResultPage;
+export default SearchResultPage
