@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import cosmos from "@/assets/cosmos.svg";
-import { api } from "@/utils/index";
+//import { api } from "@/utils/index";
 
 const PlayerPage: React.FC = () => {
   const audioPlayerRef: any = useRef(null);
@@ -54,20 +54,20 @@ const PlayerPage: React.FC = () => {
     []
   );
 
-  const updatePlaybackProgress = (e: any) => {
-    const currentTime = Math.floor(e.target.currentTime);
-    const data = {
-      data: [
-        {
-          pid,
-          eid,
-          progress: currentTime,
-          playedAt: new Date().toISOString(),
-        },
-      ],
-    };
-    //api.apiUpdatePlaybackProgress(data);
-  };
+  // const updatePlaybackProgress = (e: any) => {
+  //   const currentTime = Math.floor(e.target.currentTime);
+  //   const data = {
+  //     data: [
+  //       {
+  //         pid,
+  //         eid,
+  //         progress: currentTime,
+  //         playedAt: new Date().toISOString(),
+  //       },
+  //     ],
+  //   };
+  //   api.apiUpdatePlaybackProgress(data);
+  // };
 
   useEffect(() => {
     emitter.on("play", handlePlay as any);
@@ -119,10 +119,6 @@ const PlayerPage: React.FC = () => {
               </div>,
             ]}
             className="rounded-md"
-            onPlay={updatePlaybackProgress}
-            onPause={updatePlaybackProgress}
-            onEnded={updatePlaybackProgress}
-            onAbort={updatePlaybackProgress}
           />
         </div>
       </div>
