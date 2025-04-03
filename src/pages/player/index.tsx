@@ -19,8 +19,8 @@ const PlayerPage: React.FC = () => {
   const [audioTitle, setAudioTitle] = useState<string>("");
   const [playbackRate, setPlaybackRate] = useState<string>("1");
   const [image, setImage] = useState<string>("");
-  const [eid, setEid] = useState<string>("");
-  const [pid, setPid] = useState<string>("");
+  // const [eid, setEid] = useState<string>("");
+  // const [pid, setPid] = useState<string>("");
 
   const handleSpeedChange = (speed: string) => {
     if (audioPlayerRef.current?.audio?.current) {
@@ -34,21 +34,21 @@ const PlayerPage: React.FC = () => {
       url,
       title,
       image,
-      eid,
-      pid,
+      // eid,
+      // pid,
     }: {
       url: string;
       title: string;
       image: string;
-      eid: string;
-      pid: string;
+      // eid: string;
+      // pid: string;
     }) => {
       if (url) {
         setAudioSrc(url);
         setAudioTitle(title);
         setImage(image);
-        setEid(eid);
-        setPid(pid);
+        // setEid(eid);
+        // setPid(pid);
       }
     },
     []
