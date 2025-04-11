@@ -1,9 +1,15 @@
-```
-pnpm install
+React实现的小宇宙的网页端
 
-pnpm run dev
-```
-
+预览
+![](/images/x1.jpg)
+![](/images/x2.jpg)
+![](/images/x3.jpg)
+![](/images/x4.jpg)
+![](/images/x5.jpg)
+![](/images/x6.jpg)
+![](/images/x7.jpg)
+![](/images/x8.jpg)
+![](/images/x9.jpg)
 
 暂未实现
 - [ ] 播放列表
