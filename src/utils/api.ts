@@ -312,7 +312,17 @@ interface IInboxUpdateParams {
 }
 
 export function apiInboxUpdateList(data?: IInboxUpdateParams) {
-  return rPost("/api/v1/inbox/list", data || {});
+  let p = {
+    limit: 20
+  }
+  
+  if (data) {
+   p = {
+     ...p,
+     ...data
+   } 
+  }
+  return rPost("/api/v1/inbox/list", p);
 }
 
 //获取用户信息
