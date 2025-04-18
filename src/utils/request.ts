@@ -46,7 +46,7 @@ const commonHeader = {
     "BundleID":                    "app.podcast.cosmos",
     "Connection":                  "keep-alive",
     "abtest-info":                 "{\"old_user_discovery_feed\":\"enable\"}",
-    "Accept-Language":             "zh-Hant-HK;q=1.0, zh-Hans-CN;q=0.9",
+    "Accept-Language":             "zh-Hans-CN;q=1.0, zh-Hant-TW;q=0.9",
     "Model":                       "iPhone14,2",
     "app-permissions":             "4",
     "Accept":                      "*/*",
@@ -56,6 +56,8 @@ const commonHeader = {
     "OS-Version":                  "17.4.1",
     "x-custom-xiaoyuzhou-app-dev": "",
     "Timezone":                    "Asia/Shanghai",
+    "x-jike-device-id":            "",
+    "x-jike-device-properties":    ""
 }
 
 function rGet(url: string, params: any = {}) {
